@@ -2,7 +2,7 @@
 #define __MATERIAL_H__
 
 #include "Vector.hpp"
-
+#include "common/Tools.hpp"
 
 /**
  * define material type, in this case, we are only use diffuse
@@ -21,6 +21,13 @@ public:
 
     inline void setKd(const tinyMath::vec3f& v) {
         Kd = v;
+    }
+
+    inline bool isEmit() const {
+        if(emission.norm() > EPSILON) 
+            return true;
+        else 
+            return false;
     }
      /**
      * sample in a hemisphere according output wo and normal, generating a random input ray wi

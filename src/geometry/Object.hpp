@@ -3,14 +3,16 @@
 
 #include <optional>
 
-#include "Ray.hpp"
+
 #include "Bounds.hpp"
+
+class Ray;
+class Intersection;
 
 class Object {
 public:
-    Object();
-    ~Object();
-    
+    Object(){}
+    ~Object(){}    
     /**
      * get intersection result if the ray intersect with the object, otherwise return nullopt.
      * @param ray the ray 
@@ -31,6 +33,6 @@ public:
      * Whether the object is emit, in subclass, you can use material property to implement it.
     */
     virtual bool isEmit() const = 0;
-}
+};
 
 #endif

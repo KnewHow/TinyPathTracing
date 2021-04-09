@@ -30,8 +30,8 @@ struct Intersection {
     float t; // the ray is o + t * d, this is the t
     tinyMath::vec3f hitPoint; // the coordinates of hit point
     tinyMath::vec3f normal; // the normal of hitpoint
-    std::shared_ptr<Object> object; // which the object be intersected
-    std::shared_ptr<Material> material; // the material of hitpoint
+    std::shared_ptr<const Object> object; // which the object be intersected
+    std::shared_ptr<const Material> material; // the material of hitpoint
 };
 
 #endif
