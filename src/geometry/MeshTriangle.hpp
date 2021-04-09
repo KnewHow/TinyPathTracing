@@ -19,6 +19,7 @@ public:
     virtual Bounds getBounds() const override;
     virtual float getArea() const override;
     virtual bool isEmit() const override;
+    virtual void sample(Intersection& pos, float& pdf) const override;
 private:
     std::string filepath;
     std::vector<std::shared_ptr<Triangle>> triangles;

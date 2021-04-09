@@ -32,6 +32,13 @@ public:
      * Whether the object is emit, in subclass, you can use material property to implement it.
     */
     virtual bool isEmit() const = 0;
+
+    /**
+     * sample for object
+     * @param pos the position of sample, it will be return to the caller
+     * @param pdf the probability density function, it will be return to the caller
+    */
+    virtual void sample(Intersection& pos, float& pdf) const = 0;
 };
 
 #endif

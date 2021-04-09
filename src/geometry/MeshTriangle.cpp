@@ -52,3 +52,8 @@ float MeshTriangle::getArea() const {
 bool MeshTriangle::isEmit() const {
     return material->isEmit();
 }
+
+void MeshTriangle::sample(Intersection& pos, float& pdf) const {
+    bvh->sample(pos, pdf);
+    pos.emit = material->getEmission();
+}

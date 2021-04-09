@@ -18,6 +18,7 @@ public:
     virtual Bounds getBounds() const override;
     virtual float getArea() const override;
     virtual bool isEmit() const override; 
+    virtual void sample(Intersection& pos, float& pdf) const override;
 private:
     tinyMath::vec3f v0, v1, v2;
     tinyMath::vec3f e1, e2;

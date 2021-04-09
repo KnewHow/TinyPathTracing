@@ -31,10 +31,12 @@ std::shared_ptr<BVHNode> BVH::recursiveBuild(std::vector<std::shared_ptr<Object>
         node->left = node->right = nullptr;
         node->bounding = bouding;
         node->object = objs[0];
+        node->area = objs[0]->getArea();
     } else if(objs.size() == 2) {
         node->left = recursiveBuild(std::vector<std::shared_ptr<Object>>{objs[0]});
         node->right = recursiveBuild(std::vector<std::shared_ptr<Object>>{objs[1]});
         node->bounding = node->left->bounding.merge(node->right->bounding);
+        node->area = node->left->area + node->right->area;
     } else {
         Bounds boudingCenter;
         for(const auto& o: objs) {
@@ -70,6 +72,7 @@ std::shared_ptr<BVHNode> BVH::recursiveBuild(std::vector<std::shared_ptr<Object>
         node->left = recursiveBuild(subLeft);
         node->right = recursiveBuild(subRight);
         node->bounding = node->left->bounding.merge(node->right->bounding);
+        node->area = node->left->area + node->right->area;
     }
 
     return node;
@@ -102,4 +105,22 @@ std::optional<Intersection> BVH::recursiveIntersect(const Ray& ray, std::shared_
         }
     }
     return std::nullopt;
+}
+
+void BVH::sample(Intersection& pos, float& pdf) const {
+    float p = get_random_float() * root->area;
+    recursiveSample(root, p, pos, pdf);
+    pdf /= root->area;
+}
+
+void BVH::recursiveSample(std::shared_ptr<BVHNode> r, float p, Intersection& pos, float& pdf) const {
+    if(r->left == nullptr && r->right == nullptr) {
+        r->object->sample(pos, pdf);
+        pdf *= r->area;
+    } else {
+        if(r->left->area > p)
+            recursiveSample(r->left, p, pos, pdf);
+        else
+            recursiveSample(r->right, p - r->left->area, pos, pdf);
+    }
 }

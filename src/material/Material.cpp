@@ -36,6 +36,7 @@ tinyMath::vec3f Material::sample(const tinyMath::vec3f& wo, const tinyMath::vec3
         break;
     
     }
+    return tinyMath::vec3f(0.0f, 0.0f, 0.0f);
 }
 
 float Material::pdf(const tinyMath::vec3f& wi, const tinyMath::vec3f& wo, const tinyMath::vec3f& normal) const {
@@ -49,6 +50,7 @@ float Material::pdf(const tinyMath::vec3f& wi, const tinyMath::vec3f& wo, const 
         }
         break;
     }
+    return 0.0;
 }
 
 tinyMath::vec3f Material::eval(const tinyMath::vec3f& wi, const tinyMath::vec3f& wo, const tinyMath::vec3f& normal) const {
@@ -62,5 +64,6 @@ tinyMath::vec3f Material::eval(const tinyMath::vec3f& wi, const tinyMath::vec3f&
         }
         break;
     }
+    return tinyMath::vec3f(0.0f, 0.0f, 0.0f);
 }
 

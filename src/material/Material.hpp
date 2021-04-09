@@ -29,21 +29,23 @@ public:
         else 
             return false;
     }
+
+    inline tinyMath::vec3f getEmission() { return emission; }
      /**
      * sample in a hemisphere according output wo and normal, generating a random input ray wi
     */
-    inline tinyMath::vec3f sample(const tinyMath::vec3f& wo, const tinyMath::vec3f& normal) const;
+    tinyMath::vec3f sample(const tinyMath::vec3f& wo, const tinyMath::vec3f& normal) const;
 
     /**
      * sample pdf(probability density function) from hemishpere, in this case, we simple use 1 / (2 * pi) if dot(wo, normal) > 0
      * why use  1 / (2 * pi), because hemisphere solid angle is 2 * pi.
     */
-    inline float pdf(const tinyMath::vec3f& wi, const tinyMath::vec3f& wo, const tinyMath::vec3f& normal) const;
+    float pdf(const tinyMath::vec3f& wi, const tinyMath::vec3f& wo, const tinyMath::vec3f& normal) const;
 
     /**
      * get BRDF(Bidirectional reflectance distribution function) from current object
     */
-    inline tinyMath::vec3f eval(const tinyMath::vec3f& wi, const tinyMath::vec3f& wo, const tinyMath::vec3f& normal) const;
+    tinyMath::vec3f eval(const tinyMath::vec3f& wi, const tinyMath::vec3f& wo, const tinyMath::vec3f& normal) const;
 
 private:
     MaterialType type;

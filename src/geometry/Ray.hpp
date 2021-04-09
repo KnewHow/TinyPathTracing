@@ -28,10 +28,11 @@ struct Ray {
 */
 struct Intersection {
     float t; // the ray is o + t * d, this is the t
-    tinyMath::vec3f hitPoint; // the coordinates of hit point
+    tinyMath::vec3f coords; // the coordinates of hit point
     tinyMath::vec3f normal; // the normal of hitpoint
     std::shared_ptr<const Object> object; // which the object be intersected
     std::shared_ptr<const Material> material; // the material of hitpoint
+    tinyMath::vec3f emit; // the emit of hit point
 };
 
 #endif
