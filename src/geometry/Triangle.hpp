@@ -5,6 +5,7 @@
 
 #include "Object.hpp"
 #include "material/Material.hpp"
+#include "Bounds.hpp"
 
 class Triangle: public Object, public std::enable_shared_from_this<Triangle> {
 public:

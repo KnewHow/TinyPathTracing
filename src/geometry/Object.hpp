@@ -4,8 +4,7 @@
 #include <optional>
 
 
-#include "Bounds.hpp"
-
+class Bounds;
 class Ray;
 class Intersection;
 

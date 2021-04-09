@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "Object.hpp"
+#include "Bounds.hpp"
 #include "material/Material.hpp"
 
 class Sphere: public Object, public std::enable_shared_from_this<Sphere>{
