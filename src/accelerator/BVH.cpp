@@ -11,7 +11,7 @@ BVH::BVH(const std::vector<std::shared_ptr<Object>>& objs)
     auto begin = std::chrono::system_clock::now();
     root = recursiveBuild(objects);
     auto end = std::chrono::system_clock::now();
-    std::cout << "Time taken: " << std::chrono::duration_cast<std::chrono::hours>(end - begin).count() << " hours\n";
+    std::cout << "Build BVH Time taken: " << std::chrono::duration_cast<std::chrono::hours>(end - begin).count() << " hours\n";
     std::cout << "          : " << std::chrono::duration_cast<std::chrono::minutes>(end - begin).count() << " minutes\n";
     std::cout << "          : " << std::chrono::duration_cast<std::chrono::seconds>(end - begin).count() << " seconds\n";
 
@@ -68,7 +68,7 @@ std::shared_ptr<BVHNode> BVH::recursiveBuild(std::vector<std::shared_ptr<Object>
         auto end = objs.end();
         auto subLeft = std::vector<std::shared_ptr<Object>>(begin, middle);
         auto subRight = std::vector<std::shared_ptr<Object>>(middle, end);
-
+        assert(objs.size() == (subLeft.size() + subRight.size()));
         node->left = recursiveBuild(subLeft);
         node->right = recursiveBuild(subRight);
         node->bounding = node->left->bounding.merge(node->right->bounding);
@@ -108,15 +108,16 @@ std::optional<Intersection> BVH::recursiveIntersect(const Ray& ray, std::shared_
 }
 
 void BVH::sample(Intersection& pos, float& pdf) const {
-    float p = get_random_float() * root->area;
+    float p = std::sqrt(get_random_float()) * root->area;
     recursiveSample(root, p, pos, pdf);
     pdf /= root->area;
 }
 
 void BVH::recursiveSample(std::shared_ptr<BVHNode> r, float p, Intersection& pos, float& pdf) const {
-    if(r->left == nullptr && r->right == nullptr) {
+    if(r->left == nullptr || r->right == nullptr) {
         r->object->sample(pos, pdf);
         pdf *= r->area;
+        return;
     } else {
         if(r->left->area > p)
             recursiveSample(r->left, p, pos, pdf);

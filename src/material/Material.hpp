@@ -16,7 +16,7 @@ enum class MaterialType {
 */
 class Material {
 public:
-    Material(MaterialType t, tinyMath::vec3f em);
+    Material(MaterialType t, const tinyMath::vec3f& em);
     ~Material();
 
     inline void setKd(const tinyMath::vec3f& v) {

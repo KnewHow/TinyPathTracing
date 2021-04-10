@@ -33,12 +33,18 @@ public:
      * @return the radiace of the ray
     */
     tinyMath::vec3f castRay(const Ray& ray, int depth = 0) const;
+
+    inline float getFov() const { return fov; }
+    inline int getWidth() const { return width; }
+    inline int getHeight() const { return height; }
    
 private:
     int width, height;
     std::vector<std::shared_ptr<Object>> objects;
     std::shared_ptr<BVH> bvh;
     float RussianRoulette = 0.8;
+    float fov = 40.0f;
+    
     /**
      * Sample from light source
      * @param pos the position of ligth source

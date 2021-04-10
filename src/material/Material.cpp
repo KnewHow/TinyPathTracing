@@ -1,6 +1,6 @@
 #include "Material.hpp"
 
-Material::Material(MaterialType t, tinyMath::vec3f em)
+Material::Material(MaterialType t, const tinyMath::vec3f& em)
     :type(t), emission(em)
 {
 

@@ -20,14 +20,14 @@ MeshTriangle::MeshTriangle(const std::string& path, std::shared_ptr<Material> m)
        std::array<tinyMath::vec3f, 3> arr;
        for(int j = 0; j < 3; j++) {
            arr[j] = tinyMath::vec3f(
-               loader.LoadedVertices[i + j].Position.X,
-               loader.LoadedVertices[i + j].Position.Y,
-               loader.LoadedVertices[i + j].Position.Z
+               mesh.Vertices[i + j].Position.X,
+               mesh.Vertices[i + j].Position.Y,
+               mesh.Vertices[i + j].Position.Z
            );
        }
-       std::shared_ptr<Triangle> t = std::make_shared<Triangle>(arr[0], arr[1],arr[1], m);
+       std::shared_ptr<Triangle> t = std::make_shared<Triangle>(arr[0], arr[1],arr[2], m);
        area += t->getArea();
-       bounding.merge(t->getBounds());
+       bounding = bounding.merge(t->getBounds());
        triangles.push_back(t);
        objs.push_back(t);
    }

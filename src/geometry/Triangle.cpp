@@ -2,8 +2,10 @@
 #include "Ray.hpp"
 
 Triangle::Triangle(const tinyMath::vec3f& a, const tinyMath::vec3f& b, const tinyMath::vec3f& c, std::shared_ptr<Material> m) 
-    :v0(a), v1(b), v2(c), e1(b - a), e2(c - a), material(m)
+    :v0(a), v1(b), v2(c), material(m)
 {
+    e1 = v1 - v0;
+    e2 = v2 - v0;
     normal = tinyMath::cross(e1, e2).normalize();
     area = 0.5f * tinyMath::cross(e1, e2).norm();
     bounding = Bounds(v0, v1).merge(v2);
@@ -24,6 +26,7 @@ std::optional<Intersection> Triangle::getIntersection(const Ray& ray) const {
     } else {
         return std::nullopt;
     }
+
 }
 
 Bounds Triangle::getBounds() const {

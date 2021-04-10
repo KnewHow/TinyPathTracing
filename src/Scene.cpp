@@ -51,22 +51,25 @@ tinyMath::vec3f Scene::castRay(const Ray& ray, int depth) const {
         Ray test_ray_to_light(p.coords, ws);
         auto test_r = intersect(test_ray_to_light);
         float distance2 = (light.coords - p.coords).norm2();
-        if(test_r.has_value() && (test_r.value().coords - light.coords).norm() < EPSILON) { // light no block
-            auto brdf = p.material->eval(ws, wo, n);
-            l_dir = tinyMath::vec3f(light.emit.x * brdf.x, light.emit.y * brdf.y, light.emit.z * brdf.z) * (n * ws) * (light.normal * -ws) /  distance2 / light_pdf; 
+        if(test_r.has_value()) { // light no block
+            float d = (test_r.value().coords - light.coords).norm();
+            if(1) {
+                auto brdf = p.material->eval(ws, wo, n);
+                l_dir = tinyMath::vec3f(light.emit.x * brdf.x, light.emit.y * brdf.y, light.emit.z * brdf.z) * (n * ws) * (light.normal * -ws) /  distance2 / light_pdf; 
+            } 
         }
 
-        float ksi = get_random_float();
-        if(ksi < RussianRoulette) {
-            tinyMath::vec3f wi = p.material->sample(wo, n);
-            Ray wi_ray(p.coords, wi);
-            auto wi_ray_hit_res = intersect(ray);
-            if(wi_ray_hit_res.has_value() && !wi_ray_hit_res.value().object->isEmit()) {
-                auto light_emit = castRay(wi_ray, depth + 1);
-                auto brdf = p.material->eval(wi, wo, n);
-                l_indir = tinyMath::vec3f(light_emit.x * brdf.x, light_emit.y * brdf.y, light_emit.z * brdf.z) * (n * wi) / p.material->pdf(wi, wo, n) / RussianRoulette;
-            }
-        }
+        // float ksi = get_random_float();
+        // if(ksi < RussianRoulette) {
+        //     tinyMath::vec3f wi = p.material->sample(wo, n);
+        //     Ray wi_ray(p.coords, wi);
+        //     auto wi_ray_hit_res = intersect(ray);
+        //     if(wi_ray_hit_res.has_value() && !wi_ray_hit_res.value().object->isEmit()) {
+        //         auto light_emit = castRay(wi_ray, depth + 1);
+        //         auto brdf = p.material->eval(wi, wo, n);
+        //         l_indir = tinyMath::vec3f(light_emit.x * brdf.x, light_emit.y * brdf.y, light_emit.z * brdf.z) * (n * wi) / p.material->pdf(wi, wo, n) / RussianRoulette;
+        //     }
+        // }
 
     }
     return l_dir + l_indir;
