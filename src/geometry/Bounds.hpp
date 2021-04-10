@@ -65,6 +65,7 @@ struct Bounds {
         }
     }
 
+
     bool intersect(const Ray& ray) const {
         float t_min_x = (min.x - ray.o.x) / ray.d.x;
         float t_min_y = (min.y - ray.o.y) / ray.d.y;
@@ -74,21 +75,23 @@ struct Bounds {
         float t_max_y = (max.y - ray.o.y) / ray.d.y;
         float t_max_z = (max.z - ray.o.z) / ray.d.z;
 
-        if(ray.d.x < 0) {
+        if(ray.d.x < 0.0f) {
             std::swap(t_max_x, t_min_x);
         }
-        if(ray.d.y < 0) {
+        if(ray.d.y < 0.0f) {
             std::swap(t_max_y, t_min_y);
         }
-        if(ray.d.z < 0) {
+        if(ray.d.z < 0.0f) {
             std::swap(t_max_z, t_min_z);
         }
 
         float t_enter = std::max(t_min_x, std::max(t_min_y, t_min_z));
         float t_exit = std::min(t_max_x, std::min(t_max_y, t_max_z));
-        return t_exit > t_enter && t_exit >= 0;
+        return t_exit >= t_enter && t_exit > 0.0f;
+    
     }
 
+    
     tinyMath::vec3f min;
     tinyMath::vec3f max;
 };

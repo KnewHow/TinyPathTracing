@@ -23,12 +23,24 @@ void Renderer::render(const Scene& scene) {
             Ray ray(eye_pos, dir);
             for(int k = 0; k < spp; k++) {
                 int idx = j * scene.getWidth() + i;
-                framebuff[idx] = framebuff[idx] + scene.castRay(ray) / spp;
+                framebuff[idx] = framebuff[idx] + scene.castRay(ray, 0, i, j) / spp;
             }
         }
         p++;
         updateProgress((float)p / scene.getWidth());
     }
+    // int i = 243;
+    // int j = 333;
+    // float x = (2 * (i + 0.5) / (float)scene.getWidth() - 1) *
+    //             imageRatio * scale;
+    // float y = (1 - 2 * (j + 0.5) / (float)scene.getHeight()) * scale;
+
+    // tinyMath::vec3f dir = tinyMath::vec3f(-x, y, 1).normalize();
+    // Ray ray(eye_pos, dir);
+    // for(int k = 0; k < spp; k++) {
+    //     int idx = j * scene.getWidth() + i;
+    //     framebuff[idx] = framebuff[idx] + scene.castRay(ray, 0, i, j) / spp;
+    // }
     updateProgress(1.0);
 
     // save to file

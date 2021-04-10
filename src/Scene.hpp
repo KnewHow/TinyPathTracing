@@ -32,7 +32,7 @@ public:
      * @param depth the depth of ray bounce
      * @return the radiace of the ray
     */
-    tinyMath::vec3f castRay(const Ray& ray, int depth = 0) const;
+    tinyMath::vec3f castRay(const Ray& ray, int depth, int i, int j) const;
 
     inline float getFov() const { return fov; }
     inline int getWidth() const { return width; }
