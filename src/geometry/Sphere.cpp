@@ -3,8 +3,8 @@
 #include "Ray.hpp"
 #include "material/Material.hpp"
 
-Sphere::Sphere(const tinyMath::vec3f& c, float r, std::shared_ptr<Material> m) 
-    :center(c), radius(r), material(m), area(4 * M_PI * r * r)
+Sphere::Sphere(const tinyMath::vec3f& c, float r, std::shared_ptr<Material> m, const std::string& _name) 
+    :center(c), radius(r), material(m), area(4 * M_PI * r * r), name(_name)
 {
     bounding = Bounds(
         tinyMath::vec3f(center.x - r, center.y - r, center.z - r),

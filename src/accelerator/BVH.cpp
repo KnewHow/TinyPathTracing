@@ -90,7 +90,6 @@ std::optional<Intersection> BVH::recursiveIntersect(const Ray& ray, std::shared_
     if(r == nullptr) {
         return std::nullopt;
     } else if(r->bounding.intersect(ray)) {
-        //std::cout << "BVH intersect bounding box, min: " << r->bounding.min << ", max: " << r->bounding.max << std::endl;
         if(r->left == nullptr && r->right == nullptr) {
             return r->object->getIntersection(ray);
         } else {
@@ -115,7 +114,7 @@ void BVH::sample(Intersection& pos, float& pdf) const {
 }
 
 void BVH::recursiveSample(std::shared_ptr<BVHNode> r, float p, Intersection& pos, float& pdf) const {
-    if(r->left == nullptr || r->right == nullptr) {
+    if(r->left == nullptr && r->right == nullptr) {
         r->object->sample(pos, pdf);
         pdf *= r->area;
         return;

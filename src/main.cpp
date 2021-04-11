@@ -26,14 +26,13 @@ int main() {
     std::shared_ptr<Material> light = std::make_shared<Material>(MaterialType::DIFFUSE, (8.0f * tinyMath::vec3f(0.747f+0.058f, 0.747f+0.258f, 0.747f) + 15.6f * tinyMath::vec3f(0.740f+0.287f,0.740f+0.160f,0.740f) + 18.4f *tinyMath::vec3f(0.737f+0.642f,0.737f+0.159f,0.737f)));
     light->setKd(tinyMath::vec3f(0.65f, 0.65f, 0.65f));
 
-    std::shared_ptr<MeshTriangle> floor = std::make_shared<MeshTriangle>("../models/cornellbox/floor.obj", white);
+    std::shared_ptr<MeshTriangle> floor = std::make_shared<MeshTriangle>("../models/cornellbox/floor.obj", white, "floor");
     std::shared_ptr<MeshTriangle> shortbox = std::make_shared<MeshTriangle>("../models/cornellbox/shortbox.obj", white);
     std::shared_ptr<MeshTriangle> tallbox = std::make_shared<MeshTriangle>("../models/cornellbox/tallbox.obj", white);
-    std::shared_ptr<MeshTriangle> left = std::make_shared<MeshTriangle>("../models/cornellbox/left.obj", red);
-    std::shared_ptr<MeshTriangle> right = std::make_shared<MeshTriangle>("../models/cornellbox/right.obj", green);
-    std::shared_ptr<MeshTriangle> lightMesh = std::make_shared<MeshTriangle>("../models/cornellbox/light.obj", light);
+    std::shared_ptr<MeshTriangle> left = std::make_shared<MeshTriangle>("../models/cornellbox/left.obj", red, "left");
+    std::shared_ptr<MeshTriangle> right = std::make_shared<MeshTriangle>("../models/cornellbox/right.obj", green, "right");
+    std::shared_ptr<MeshTriangle> lightMesh = std::make_shared<MeshTriangle>("../models/cornellbox/light.obj", light, "light");
 
-    std::cout << "tallbox bounding box, min:" << tallbox->getBounds().min << ", max: " << tallbox->getBounds().max << std::endl;
     scene.addObject(floor);
     scene.addObject(shortbox);
     scene.addObject(tallbox);

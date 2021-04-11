@@ -12,13 +12,14 @@ public:
     /**
      * The three points of triangle, you should give them in clockwise
     */
-    Triangle(const tinyMath::vec3f& a, const tinyMath::vec3f& b, const tinyMath::vec3f& c, std::shared_ptr<Material> m);
+    Triangle(const tinyMath::vec3f& a, const tinyMath::vec3f& b, const tinyMath::vec3f& c, std::shared_ptr<Material> m, const std::string& _name = "");
     ~Triangle();
     virtual std::optional<Intersection> getIntersection(const Ray& ray) const override;
     virtual Bounds getBounds() const override;
     virtual float getArea() const override;
     virtual bool isEmit() const override; 
     virtual void sample(Intersection& pos, float& pdf) const override;
+    virtual std::string getName() const override { return this->name; }
 private:
     tinyMath::vec3f v0, v1, v2;
     tinyMath::vec3f e1, e2;
@@ -26,6 +27,7 @@ private:
     float area;
     Bounds bounding;
     std::shared_ptr<Material> material;
+    std::string name;
 };
 
 #endif

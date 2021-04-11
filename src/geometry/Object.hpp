@@ -2,6 +2,7 @@
 #define __OBJECT_H__
 
 #include <optional>
+#include <string>
 
 
 class Bounds;
@@ -39,6 +40,11 @@ public:
      * @param pdf the probability density function, it will be return to the caller
     */
     virtual void sample(Intersection& pos, float& pdf) const = 0;
+
+    /**
+     * to debug, get model name
+    */
+    virtual std::string getName() const = 0;
 };
 
 #endif

@@ -5,8 +5,8 @@
 #include "OBJ_Loader.hpp"
 #include "Ray.hpp"
 
-MeshTriangle::MeshTriangle(const std::string& path, std::shared_ptr<Material> m)
-    :filepath(path), material(m), area(0.0f), triangles(),bounding(), bvh(nullptr)
+MeshTriangle::MeshTriangle(const std::string& path, std::shared_ptr<Material> m, const std::string& _name)
+    :filepath(path), material(m), area(0.0f), triangles(),bounding(), bvh(nullptr), name(_name)
 {
    objl::Loader loader = objl::Loader();
    if(!loader.LoadFile(path)) {
@@ -25,7 +25,7 @@ MeshTriangle::MeshTriangle(const std::string& path, std::shared_ptr<Material> m)
                mesh.Vertices[i + j].Position.Z
            );
        }
-       std::shared_ptr<Triangle> t = std::make_shared<Triangle>(arr[0], arr[1],arr[2], m);
+       std::shared_ptr<Triangle> t = std::make_shared<Triangle>(arr[0], arr[1],arr[2], m, this->name);
        area += t->getArea();
        bounding = bounding.merge(t->getBounds());
        triangles.push_back(t);

@@ -1,8 +1,8 @@
 #include "Triangle.hpp"
 #include "Ray.hpp"
 
-Triangle::Triangle(const tinyMath::vec3f& a, const tinyMath::vec3f& b, const tinyMath::vec3f& c, std::shared_ptr<Material> m) 
-    :v0(a), v1(b), v2(c), material(m)
+Triangle::Triangle(const tinyMath::vec3f& a, const tinyMath::vec3f& b, const tinyMath::vec3f& c, std::shared_ptr<Material> m, const std::string& _name) 
+    :v0(a), v1(b), v2(c), material(m), name(_name)
 {
     e1 = v1 - v0;
     e2 = v2 - v0;
@@ -28,6 +28,34 @@ std::optional<Intersection> Triangle::getIntersection(const Ray& ray) const {
     } else {
         return std::nullopt;
     }
+
+
+    // if ((ray.d * normal) > 0)
+    //     return std::nullopt;
+    // double u, v, t_tmp = 0;
+    // tinyMath::vec3f pvec = tinyMath::cross(ray.d, e2);
+    // double det = (e1 * pvec);
+    // if (fabs(det) < EPSILON)
+    //     return std::nullopt;
+
+    // double det_inv = 1. / det;
+    // tinyMath::vec3f tvec = ray.o - v0;
+    // u = (tvec * pvec) * det_inv;
+    // if (u < 0 || u > 1)
+    //     return std::nullopt;
+    // tinyMath::vec3f qvec = tinyMath::cross(tvec, e1);
+    // v = (ray.d * qvec) * det_inv;
+    // if (v < 0 || u + v > 1)
+    //     return std::nullopt;
+    // t_tmp = (e2 * qvec) * det_inv;
+    
+    // Intersection inter;
+    // inter.t = t_tmp;
+    // inter.object = shared_from_this();
+    // inter.coords = tinyMath::vec3f(ray.o + t_tmp * ray.d);
+    // inter.normal = this->normal;
+    // inter.material = this->material;
+    // return inter;
 }
 
 Bounds Triangle::getBounds() const {

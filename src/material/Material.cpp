@@ -13,10 +13,10 @@ Material::~Material() {
 tinyMath::vec3f toWorld(const tinyMath::vec3f& localRay, const tinyMath::vec3f& normal) {
     tinyMath::vec3f B, C;
     if(std::fabs(normal.x) > std::fabs(normal.y)) {
-        float invLen = 1.0f / std::sqrt(normal.x * normal.x + normal.z + normal.z);
+        float invLen = 1.0f / std::sqrt(normal.x * normal.x + normal.z * normal.z);
         C = tinyMath::vec3f(normal.z * invLen, 0.0f, -normal.x * invLen);
     } else {
-        float invLen = 1.0f / std::sqrt(normal.y + normal.y + normal.z * normal.z);
+        float invLen = 1.0f / std::sqrt(normal.y * normal.y + normal.z * normal.z);
         C = tinyMath::vec3f(0.0f, normal.z * invLen, -normal.y * invLen);
     }
 
@@ -31,7 +31,7 @@ tinyMath::vec3f Material::sample(const tinyMath::vec3f& wo, const tinyMath::vec3
         float x_1 = get_random_float(), x_2 = get_random_float();
         float z = std::fabs(1.0f - 2.0f * x_1);
         float r = std::sqrt(1.0f - z * z), phi = 2 * M_PI * x_2;
-        tinyMath::vec3f localRay(r * std::cos(phi), r * std::sin(phi), z);
+        tinyMath::vec3f localRay = tinyMath::vec3f(r * std::cos(phi), r * std::sin(phi), z);
         return toWorld(localRay, normal);
         break;
     
