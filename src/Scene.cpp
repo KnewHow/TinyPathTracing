@@ -43,9 +43,10 @@ tinyMath::vec3f Scene::castRay(const Ray& ray, int depth, int i, int j) const {
     if(cast_r.has_value()) {
         Intersection p = cast_r.value();
         Intersection light;
-        // light.coords = tinyMath::vec3f(226.258, 548.7, 287.839);
-        // light.normal = tinyMath::vec3f(0, -1, 0);
-        // light.emit = tinyMath::vec3f(47.8348, 38.5664, 31.0808);
+        light.coords = tinyMath::vec3f(226.258, 548.7, 287.839);
+        light.normal = tinyMath::vec3f(0, -1, 0);
+        light.emit = tinyMath::vec3f(47.8348, 38.5664, 31.0808);
+        //float light_pdf = 7.32601e-05;
         float light_pdf;
         sampleLight(light, light_pdf);
         tinyMath::vec3f wo = ray.d;
@@ -62,6 +63,9 @@ tinyMath::vec3f Scene::castRay(const Ray& ray, int depth, int i, int j) const {
                 l_dir = tinyMath::vec3f(light.emit.x * brdf.x, light.emit.y * brdf.y, light.emit.z * brdf.z) * (n * ws) * (light.normal * -ws) /  distance2 / light_pdf; 
                 //std::cout << "i is: " << i << ", j is: " << j << ", p pos: " << p.coords << ", light pos: " << light.coords  << ", pdf is: "<<light_pdf << std::endl;
                 //std::cout << "test ray o: " << test_ray_to_light.o << ", test ray d: " << test_ray_to_light.d << ", test t is: " << test_r.value().t << ", test pos: " << test_r.value().coords << ", test d is: " << d << std::endl;
+                // if(i ==243 && j == 333) {
+                //     std::cout << "L_dir is: " << l_dir << std::endl;
+                // }
             } 
         }
 

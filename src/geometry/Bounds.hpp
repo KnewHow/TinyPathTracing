@@ -87,7 +87,7 @@ struct Bounds {
 
         float t_enter = std::max(t_min_x, std::max(t_min_y, t_min_z));
         float t_exit = std::min(t_max_x, std::min(t_max_y, t_max_z));
-        return t_exit >= t_enter && t_exit > 0.0f;
+        return t_exit >= t_enter && t_exit > 0.0f; // because area light is surface, in this case, `t_exit` will equal `t_enter`, so this condition is `>=`
     
     }
 

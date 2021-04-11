@@ -29,6 +29,7 @@ void Renderer::render(const Scene& scene) {
         p++;
         updateProgress((float)p / scene.getWidth());
     }
+
     // int i = 243;
     // int j = 333;
     // float x = (2 * (i + 0.5) / (float)scene.getWidth() - 1) *
