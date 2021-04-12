@@ -9,7 +9,7 @@ void Renderer::render(const Scene& scene) {
     float imageRatio = (float) scene.getWidth() / scene.getHeight();
     tinyMath::vec3f eye_pos = tinyMath::vec3f(278, 273, -800);
     std::atomic_int p = 0;
-    int spp = 4;
+    int spp = 16;
     std::cout << "SPP is: " << spp << std::endl;
 
     #pragma omp parallel for
