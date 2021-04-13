@@ -1,0 +1,4 @@
+[submodule "TinyMath"]
+	path = TinyMath
+	url = https://github.com/KnewHow/TinyMath.git
+	branch = 1.0.0
