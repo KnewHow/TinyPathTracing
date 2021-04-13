@@ -10,6 +10,8 @@ set(SOURCES "${SRC_DIR}/main.cpp")
 file(GLOB SOURCES
     "${SRC_DIR}/*.hpp"
     "${SRC_DIR}/*.cpp"
+    "${SRC_DIR}/common/*.hpp"
+    "${SRC_DIR}/common/*.cpp"
 )
 
 # Executable definition and properties
