@@ -28,11 +28,15 @@ struct Image {
         std::ofstream fo;
         fo.open(filepath);
         fo << "P3\n"  << width << " " << height << "\n255\n";
-        for(const auto& rgb: framebuff) {
-            int r = rgb.x * 255.0f;
-            int g = rgb.y * 255.0f;
-            int b = rgb.z * 255.0f;
-            fo << r << " " << g << " " << b << std::endl;
+        for(int j = height - 1; j>=0; j--) {
+            for(int i = width - 1; i >=0; i--) {
+                int idx = j * width + i;
+                tinyMath::vec3f rgb = framebuff[idx];
+                int r = rgb.x * 255.0f;
+                int g = rgb.y * 255.0f;
+                int b = rgb.z * 255.0f;
+                fo << r << " " << g << " " << b << std::endl;
+            }
         }
         fo.close();
     }

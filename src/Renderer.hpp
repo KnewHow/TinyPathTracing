@@ -23,11 +23,12 @@ public:
         
         for(int j = image->height - 1; j >= 0; j--) {
             for(int i = image->width - 1; i >= 0; i--) {
-                int u = (float) i / (image->width - 1);
-                int v = (float) j / (image->height - 1);
+                float u = (float) i / (image->width - 1);
+                float v = (float) j / (image->height - 1);
                 tinyMath::vec3f d = (lower_left_corner + u * horizontal + v * vertical - origin).normalize();
                 Ray ray(origin, d);
-                image->framebuff[j * image->width + i] = scene.castRay(ray);
+                tinyMath::vec3f r = scene.castRay(ray);
+                image->framebuff[j * image->width + i] = r;
             }
             p++;
             updateProgress((float) p / image->height);
