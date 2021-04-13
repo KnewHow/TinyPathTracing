@@ -1,5 +1,3 @@
 # PathTracing
-A Tiny Path Tracing 
+A Tiny Path Tracing, refer: [Ray Tracing in One Weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html)
 
-use the 16 as the spp, it will took 28min in 4 core cpu, the result is: 
-![](./result.jpg)
