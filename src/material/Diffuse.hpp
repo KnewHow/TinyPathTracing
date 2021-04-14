@@ -15,13 +15,13 @@ public:
         Ray& scattered
     ) const override
     {
-        tinyMath::vec3f dir = (intersect.normal + get_random_vector_in_unit_sphere().normalize()).normalize();
+        // tinyMath::vec3f dir = (intersect.coords + intersect.normal + get_random_vector_in_unit_sphere().normalize() - intersect.coords).normalize();
        
-        if(isNearZero(dir)) {
-            dir = intersect.normal;
-        }
-        scattered = Ray(intersect.coords, dir);
-        attenuation = albedo;
+        // if(isNearZero(dir)) {
+        //     dir = intersect.normal;
+        // }
+        // scattered = Ray(intersect.coords, dir);
+        // attenuation = albedo;
         return true;
     }
 

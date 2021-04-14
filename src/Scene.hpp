@@ -6,6 +6,8 @@
 #include <limits>
 
 #include "geometry/Object.hpp"
+#include "material/Material.hpp"
+#include "geometry/Ray.hpp"
 
 class Scene {
 public:
@@ -24,7 +26,14 @@ public:
            std::optional<IntersectResult> r = obj->intersect(ray, 0.001f, std::numeric_limits<float>::infinity());
            if(r.has_value()) {
                auto p = r.value();
+               Ray newRay;
+               tinyMath::vec3f attenuation;
                return 0.5 * castRay(Ray::sampleWithHemisphere(p.coords, p.normal), depth - 1);
+            //    if(p.material->scatter(ray, p, attenuation, newRay)) {
+            //        return 0.5 * castRay(newRay, depth - 1);
+            //    } else {
+            //        return tinyMath::vec3f(0.0f);
+            //    }
            }
         }
 

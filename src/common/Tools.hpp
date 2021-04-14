@@ -38,7 +38,11 @@ inline tinyMath::vec3f get_random_vector(float min, float max) {
 
 inline bool isNearZero(const tinyMath::vec3f& v) {
     float epsilon = 1e-8;
-    return (v.x < epsilon) && (v.y < epsilon) && (v.z < epsilon);
+    return (std::fabs(v.x) < epsilon) && (std::fabs(v.y) < epsilon) && (std::fabs(v.z) < epsilon);
+}
+
+inline tinyMath::vec3f reflect(const tinyMath::vec3f& I, const tinyMath::vec3f& N) {
+    return I - 2 * tinyMath::dotProduct(I, N) * N;
 }
 
 inline tinyMath::vec3f get_random_vector_in_unit_sphere() {
