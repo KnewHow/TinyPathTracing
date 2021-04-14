@@ -35,6 +35,12 @@ inline tinyMath::vec3f get_random_vector(float min, float max) {
     );
 }
 
+
+inline bool isNearZero(const tinyMath::vec3f& v) {
+    float epsilon = 1e-8;
+    return (v.x < epsilon) && (v.y < epsilon) && (v.z < epsilon);
+}
+
 inline tinyMath::vec3f get_random_vector_in_unit_sphere() {
     while (true)
     {

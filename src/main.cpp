@@ -19,8 +19,8 @@ int main() {
     std::shared_ptr<Image> image = std::make_shared<Image>(width, aspect_ratio, filepath);
     Camera camera(aspect_ratio);
     Scene scene;
-    scene.addObject(std::make_shared<Sphere>(tinyMath::vec3f(0, 0, -1.0f), 0.5f));
-    scene.addObject(std::make_shared<Sphere>(tinyMath::vec3f(0.0f, -100.5f,-1.0f), 100.0f));
+    //scene.addObject(std::make_shared<Sphere>(tinyMath::vec3f(0, 0, -1.0f), 0.5f));
+    //scene.addObject(std::make_shared<Sphere>(tinyMath::vec3f(0.0f, -100.5f,-1.0f), 100.0f));
     Renderer render(image);
     
     auto begin = std::chrono::system_clock::now();

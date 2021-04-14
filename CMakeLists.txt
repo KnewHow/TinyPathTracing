@@ -14,6 +14,8 @@ file(GLOB SOURCES
     "${SRC_DIR}/common/*.cpp"
     "${SRC_DIR}/geometry/*.hpp"
     "${SRC_DIR}/geometry/*.cpp"
+    "${SRC_DIR}/material/*.hpp"
+    "${SRC_DIR}/material/*.cpp"
 )
 
 # Executable definition and properties

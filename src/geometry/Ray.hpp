@@ -3,6 +3,8 @@
 #include "Vector.hpp"
 #include "common/Tools.hpp"
 
+class Material;
+
 
 /**
  * define a ray with o + t * d
@@ -15,17 +17,6 @@ struct Ray
     const tinyMath::vec3f o;
     const tinyMath::vec3f d;
 
-    /**
-     * sample ouput ray from hit point in diffuse material, 
-     * in this method, we use unit radius spheres tangent to do sample
-     * hitPoint + normal will get a sphere center, the we random sample a direction, the mins hitPoint, getting the output direction
-     * 
-    */
-    static inline Ray sampleWithUnitSphere(const tinyMath::vec3f& hitPoint, const tinyMath::vec3f& hitNormal) {
-        tinyMath::vec3f dir = (hitPoint + hitNormal + get_random_vector_in_unit_sphere().normalize() - hitPoint).normalize();
-        Ray r(hitPoint, dir);
-        return r;
-    } 
 
     static inline Ray sampleWithHemisphere(const tinyMath::vec3f& hitPoint, const tinyMath::vec3f& hitNormal) {
         tinyMath::vec3f random_dir = get_random_vector_in_unit_sphere();
@@ -48,6 +39,7 @@ struct IntersectResult {
         coords = tinyMath::vec3f(0.0);
         normal = tinyMath::vec3f(0.0);
         isFrontFace = false;
+        material = nullptr;
     };
 
     ~IntersectResult(){}
@@ -55,6 +47,7 @@ struct IntersectResult {
     tinyMath::vec3f coords; // the hit points coords
     tinyMath::vec3f normal; // the hit points normal
     bool isFrontFace; // wheather ray is cast from outward
+    std::shared_ptr<Material> material; // the material of hit point
     
     /**
      * judge front face or back face, as well as, determine the normal direction
