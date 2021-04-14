@@ -6,7 +6,14 @@
 
 #include "Vector.hpp"
 
-
+inline float clamp(float v, float min, float max){
+    if(v < min)
+        return min;
+    else if(v > max)
+        return max;
+    else
+        return v;
+}
 
 inline float get_random_float(float min, float max)
 {
@@ -41,9 +48,12 @@ inline tinyMath::vec3f get_random_vector_in_unit_sphere() {
 
 void printTimeTook(std::chrono::_V2::system_clock::time_point begin,std::chrono::_V2::system_clock::time_point end, const std::string& functionName) {
     std::cout << "run [" << functionName << "] took: \n";
-    std::cout << std::chrono::duration_cast<std::chrono::hours>(end - begin).count() << " hours\n";
-    std::cout << std::chrono::duration_cast<std::chrono::minutes>(end - begin).count() << " minutes\n";
-    std::cout << std::chrono::duration_cast<std::chrono::seconds>(end - begin).count() << " seconds\n";
+    auto hours = std::chrono::duration_cast<std::chrono::hours>(end - begin).count();
+    auto minutes = std::chrono::duration_cast<std::chrono::minutes>(end - begin).count() - hours * 60;
+    auto seconds = std::chrono::duration_cast<std::chrono::seconds>(end - begin).count() - minutes * 60 - hours * 3600;
+    std::cout << hours << " hours\n";
+    std::cout << minutes << " minutes\n";
+    std::cout <<  seconds << " seconds\n";
     
 
 }

@@ -2,7 +2,9 @@
 
 #include <fstream>
 #include <vector>
+
 #include "Vector.hpp"
+#include <common/Tools.hpp>
 
 struct Image {
     const int width, height;
@@ -32,9 +34,9 @@ struct Image {
             for(int i = width - 1; i >=0; i--) {
                 int idx = j * width + i;
                 tinyMath::vec3f rgb = framebuff[idx];
-                int r = rgb.x * 255.0f;
-                int g = rgb.y * 255.0f;
-                int b = rgb.z * 255.0f;
+                int r = clamp(std::sqrt(rgb.x), 0.0f, 1.0f) * 255.0f; // gamma correction
+                int g = clamp(std::sqrt(rgb.y), 0.0f, 1.0f) * 255.0f;
+                int b = clamp(std::sqrt(rgb.z), 0.0f, 1.0f) * 255.0f;
                 fo << r << " " << g << " " << b << std::endl;
             }
         }

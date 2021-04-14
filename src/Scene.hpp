@@ -21,12 +21,10 @@ public:
         }
 
         for(const auto& obj: objects) {
-           std::optional<IntersectResult> r = obj->intersect(ray, 0.0f, std::numeric_limits<float>::infinity());
+           std::optional<IntersectResult> r = obj->intersect(ray, 0.001f, std::numeric_limits<float>::infinity());
            if(r.has_value()) {
                auto p = r.value();
-               tinyMath::vec3f newDir = (p.coords + p.normal + get_random_vector_in_unit_sphere() - p.coords).normalize();
-               Ray newRay(p.coords, newDir);
-               return 0.5 * castRay(newRay, depth - 1);
+               return 0.5 * castRay(Ray::sampleWithHemisphere(p.coords, p.normal), depth - 1);
            }
         }
 
