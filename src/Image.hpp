@@ -31,7 +31,7 @@ struct Image {
         fo.open(filepath);
         fo << "P3\n"  << width << " " << height << "\n255\n";
         for(int j = height - 1; j>=0; j--) {
-            for(int i = width - 1; i >=0; i--) {
+            for(int i = 0; i < width; i++) {
                 int idx = j * width + i;
                 tinyMath::vec3f rgb = framebuff[idx];
                 int r = clamp(std::sqrt(rgb.x), 0.0f, 1.0f) * 255.0f; // gamma correction

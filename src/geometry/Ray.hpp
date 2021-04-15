@@ -30,7 +30,7 @@ struct Ray
         return r;
     }
 
-    Ray& operator=(const Ray& ray) {
+    Ray operator=(const Ray& ray) {
         o = ray.o;
         d = ray.d;
         return *this;
