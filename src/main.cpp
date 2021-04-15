@@ -14,6 +14,7 @@
 #include "material/Material.hpp"
 #include "material/Diffuse.hpp"
 #include "material/Metal.hpp"
+#include "material/Dielectric.hpp"
 
 int main() {
     int width = 400;

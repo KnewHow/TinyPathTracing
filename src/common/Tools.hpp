@@ -45,6 +45,13 @@ inline tinyMath::vec3f reflect(const tinyMath::vec3f& I, const tinyMath::vec3f& 
     return I - 2 * tinyMath::dotProduct(I, N) * N;
 }
 
+inline tinyMath::vec3f refract(const tinyMath::vec3f& I, const tinyMath::vec3f& N, float refraction_ratio) {
+    float cos_theta = std::fmin(tinyMath::dotProduct(-I, N), 1.0f);
+    tinyMath::vec3f r_perp = refraction_ratio * (I + cos_theta * N);
+    tinyMath::vec3f r_parallel = -std::sqrt(std::fabs(1 - r_perp.norm2())) * N;
+    return r_perp + r_parallel;
+}
+
 inline tinyMath::vec3f get_random_vector_in_unit_sphere() {
     while (true)
     {
