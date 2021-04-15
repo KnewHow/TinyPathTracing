@@ -27,7 +27,7 @@ public:
             return std::nullopt;
         
         tinyMath::vec3f hitPoint = ray.o + t * ray.d;
-        tinyMath::vec3f normal = (hitPoint - center).normalize();
+        tinyMath::vec3f normal = ((hitPoint - center) / radius).normalize();
         IntersectResult r;
         r.t = t;
         r.coords = hitPoint;

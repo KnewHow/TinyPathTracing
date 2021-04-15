@@ -28,6 +28,6 @@ public:
     tinyMath::vec3f horizontal;
     tinyMath::vec3f vertical;
     tinyMath::vec3f lower_left_corner;
-    const int samples_per_pixel = 32;
+    const int samples_per_pixel = 100;
 
 };

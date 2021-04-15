@@ -24,19 +24,21 @@ int main() {
     Camera camera(aspect_ratio);
     
     std::shared_ptr<Material> mat_ground = std::make_shared<Diffuse>(tinyMath::vec3f(0.8f, 0.8f, 0.0f));
-    std::shared_ptr<Material> mat_center = std::make_shared<Diffuse>(tinyMath::vec3f(0.7f, 0.3f, 0.3f));
-    std::shared_ptr<Material> mat_left = std::make_shared<Metal>(tinyMath::vec3f(0.8f), 0.3f);
-    std::shared_ptr<Material> mat_right = std::make_shared<Metal>(tinyMath::vec3f(0.8f, 0.6f,0.2f), 1.0f);
+    std::shared_ptr<Material> mat_center = std::make_shared<Diffuse>(tinyMath::vec3f(0.1f, 0.2f, 0.5f));
+    std::shared_ptr<Material> mat_left = std::make_shared<Dielectric>(1.5f);
+    std::shared_ptr<Material> mat_right = std::make_shared<Metal>(tinyMath::vec3f(0.8f, 0.6f,0.2f), 0.0f);
 
     std::shared_ptr<Object> obj_ground = std::make_shared<Sphere>(tinyMath::vec3f(0.0f, -100.5f, -1.0f), 100.0f, mat_ground);
     std::shared_ptr<Object> obj_center = std::make_shared<Sphere>(tinyMath::vec3f(0.0f, 0.0f, -1.0f), 0.5f, mat_center);
-    std::shared_ptr<Object> obj_left = std::make_shared<Sphere>(tinyMath::vec3f(-1.0f, 0.0f, -1.0f), 0.5f, mat_left);
+    std::shared_ptr<Object> obj_left = std::make_shared<Sphere>(tinyMath::vec3f(-1.0f, 0.0f, -1.0f), 0.5f, mat_left); // make bubble use radisu 0.5 and radius -0.4
+    std::shared_ptr<Object> obj_left_inner = std::make_shared<Sphere>(tinyMath::vec3f(-1.0f, 0.0f, -1.0f), -0.4f, mat_left);
     std::shared_ptr<Object> obj_right = std::make_shared<Sphere>(tinyMath::vec3f(1.0f, 0.0f, -1.0f), 0.5f, mat_right);
     
     Scene scene;
     scene.addObject(obj_ground);
     scene.addObject(obj_center);
     scene.addObject(obj_left);
+    scene.addObject(obj_left_inner);
     scene.addObject(obj_right);
     
     Renderer render(image);

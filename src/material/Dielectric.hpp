@@ -17,9 +17,8 @@ public:
     ) const override {
         attenuation = tinyMath::vec3f(1.0f);
         float refraction_ratio = intersect.isFrontFace ? (1.0 / ir) : ir;
-        float cos_theta = std::fmin(tinyMath::dotProduct(-ray.d.normalize(), intersect.coords), 1.0f);
-        float sin_theta = std::sqrt(1 - cos_theta * cos_theta);
-
+        float cos_theta = std::fmin(tinyMath::dotProduct(-ray.d, intersect.normal), 1.0f);
+        float sin_theta = std::sqrt(1.0f - cos_theta * cos_theta);
         bool cannot_refract = refraction_ratio * sin_theta > 1.0f;
         tinyMath::vec3f newDir = tinyMath::vec3f(0.0f);
         if(cannot_refract || reflection(cos_theta, refraction_ratio) > get_random_float()) {
@@ -34,13 +33,13 @@ public:
     }
     
     
-    float ir;
+    float ir; // index of refraction
 
 private:
-    static float reflection(float consin, float ref_idx) { // Schlick's approximation: https://en.wikipedia.org/wiki/Schlick%27s_approximation
+    static float reflection(float cosine, float ref_idx) { // Schlick's approximation: https://en.wikipedia.org/wiki/Schlick%27s_approximation
         float R0 = (1 - ref_idx) / (1 + ref_idx);
         R0 = R0 * R0;
-        float r = R0 + (1 - R0) * std::pow((1 - R0), 5);
+        float r = R0 + (1 - R0) * std::pow((1 - cosine), 5);
         return r;
     }
 };
