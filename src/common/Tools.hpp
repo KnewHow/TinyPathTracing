@@ -35,6 +35,23 @@ inline tinyMath::vec3f get_random_vector(float min, float max) {
     );
 }
 
+inline tinyMath::vec3f get_random_vector() {
+    return tinyMath::vec3f(
+        get_random_float(),
+        get_random_float(),
+        get_random_float()
+    );
+}
+
+inline tinyMath::vec3f get_random_in_unit_disk() {
+    while(true) {
+        tinyMath::vec3f r = tinyMath::vec3f(get_random_float(-1.0f, 1.0f), get_random_float(-1.0f, 1.0f), 0.0f);
+        if(r.norm2() >= 1)
+            continue;
+        return r;
+    }
+}
+
 
 inline bool isNearZero(const tinyMath::vec3f& v) {
     float epsilon = 1e-8;
@@ -50,6 +67,10 @@ inline tinyMath::vec3f refract(const tinyMath::vec3f& I, const tinyMath::vec3f& 
     tinyMath::vec3f r_perp = refraction_ratio * (I + cos_theta * N);
     tinyMath::vec3f r_parallel = -std::sqrt(std::fabs(1 - r_perp.norm2())) * N;
     return r_perp + r_parallel;
+}
+
+inline float degree2Radian(float degree) {
+    return degree * M_PI / 180.0f;
 }
 
 inline tinyMath::vec3f get_random_vector_in_unit_sphere() {
