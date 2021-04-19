@@ -18,7 +18,7 @@ public:
     {
         tinyMath::vec3f reflectDir = reflect(ray.d.normalize(), intersect.normal);
         reflectDir = (reflectDir +  fuzz * get_random_vector_in_unit_sphere()).normalize();
-        scattered = Ray(intersect.coords, reflectDir);
+        scattered = Ray(intersect.coords, reflectDir, ray.time);
         attenuation = albedo;
         return tinyMath::dotProduct(reflectDir, intersect.normal) > 0.0f;
     }

@@ -11,13 +11,20 @@ class Material;
 */
 struct Ray
 {
-    Ray(const tinyMath::vec3f& origin, const tinyMath::vec3f& direction)
-        :o(origin), d(direction){}
+    /**
+     * ray constructor
+     * @param origin the origin of ray
+     * @param direction the direction of the ray
+     * @param _time the time the ray transport, you can also see it as the time the object moves from begin time
+    */
+    Ray(const tinyMath::vec3f& origin, const tinyMath::vec3f& direction, float _time = 0.0f)
+        :o(origin), d(direction), time(_time){}
     Ray()
-        :o(tinyMath::vec3f(0.0f)), d(tinyMath::vec3f(0.0f)){}
+        :o(tinyMath::vec3f(0.0f)), d(tinyMath::vec3f(0.0f)), time(0.0f){}
     
     tinyMath::vec3f o;
     tinyMath::vec3f d;
+    float time;
 
 
     static inline Ray sampleWithHemisphere(const tinyMath::vec3f& hitPoint, const tinyMath::vec3f& hitNormal) {

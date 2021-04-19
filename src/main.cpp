@@ -9,8 +9,10 @@
 #include "common/Tools.hpp"
 #include "Renderer.hpp"
 #include "Scene.hpp"
-#include "Renderer.hpp"
+
 #include "geometry/Sphere.hpp"
+#include "geometry/MovingSphere.hpp"
+
 #include "material/Material.hpp"
 #include "material/Diffuse.hpp"
 #include "material/Metal.hpp"
@@ -26,22 +28,27 @@ void random_scene(Scene& scene) {
                 if(choose_mat < 0.8) { // diffuse 
                     tinyMath::vec3f albedo = get_random_vector() * get_random_vector();
                     shpere_mat = std::make_shared<Diffuse>(albedo);
+                    tinyMath::vec3f center1 = center + tinyMath::vec3f(0.0f, get_random_float(0.0f, 0.5f), 0.0f);
+                    std::shared_ptr<MovingSphere> obj = std::make_shared<MovingSphere>(center, center1, 0.0f, 1.0f, 0.2f, shpere_mat);
+                    scene.addObject(obj);
                 } else if(choose_mat < 0.95) { // metal
                     tinyMath::vec3f color = get_random_vector(0.5f, 1.0f);
                     float fuzz = get_random_float(0.0f, 0.5f);
                     shpere_mat = std::make_shared<Metal>(color, fuzz);
+                    scene.addObject(std::make_shared<Sphere>(center, 0.2f, shpere_mat));
                 } else { // glass m
                     shpere_mat = std::make_shared<Dielectric>(1.5f);
+                    scene.addObject(std::make_shared<Sphere>(center, 0.2f, shpere_mat));
                 }
-                scene.addObject(std::make_shared<Sphere>(center, 0.2f, shpere_mat));
+                
             }
         }
     }
 }
 
 int main() {
-    int width = 1200;
-    float aspect_ratio = 3.0f / 2.0f;
+    int width = 400;
+    float aspect_ratio = 16.0f / 9.0f;
     std::string filepath = "./result.ppm";
     std::shared_ptr<Image> image = std::make_shared<Image>(width, aspect_ratio, filepath);
     tinyMath::vec3f lookfrom = tinyMath::vec3f(13.0f, 2.0f, 3.0f);
@@ -49,7 +56,7 @@ int main() {
     tinyMath::vec3f vup = tinyMath::vec3f(0.0f, 1.0f, 0.0f);
     float focus_dist = 10.0f;
     float aperture = 0.1f;
-    Camera camera(lookfrom, lookat, vup, 20, aspect_ratio, aperture, focus_dist);
+    Camera camera(lookfrom, lookat, vup, 20, aspect_ratio, aperture, focus_dist, 0.0f, 1.0f);
     
     std::shared_ptr<Material> mat_ground = std::make_shared<Diffuse>(tinyMath::vec3f(0.5f, 0.5f, 0.5f));
     std::shared_ptr<Material> mat_1 = std::make_shared<Dielectric>(1.5f);

@@ -13,7 +13,7 @@ public:
         :image(_image){}
 
     void render(const Scene& scene, const Camera& camera) {
-        int maxDepth = 50;
+        int maxDepth = 8;
         std::atomic_int p = 0;
         #pragma omp parallel for
         for(int j = image->height - 1; j >= 0; j--) {

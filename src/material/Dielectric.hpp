@@ -27,7 +27,7 @@ public:
             newDir = refract(ray.d, intersect.normal, refraction_ratio);
         }
 
-        scattered = Ray(intersect.coords, newDir.normalize());
+        scattered = Ray(intersect.coords, newDir.normalize(), ray.time);
 
         return true;
     }

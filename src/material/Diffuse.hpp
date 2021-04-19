@@ -19,7 +19,7 @@ public:
         if(isNearZero(dir)) {
             dir = intersect.normal;
         }
-        scattered = Ray(intersect.coords, dir);
+        scattered = Ray(intersect.coords, dir, ray.time);
         attenuation = albedo;
         return true;
     }
