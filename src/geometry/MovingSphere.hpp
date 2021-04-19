@@ -5,6 +5,7 @@
 #include "Object.hpp"
 #include "Ray.hpp"
 #include "material/Material.hpp"
+#include "BoundingBox.hpp"
 
 class MovingSphere: public Object {
 public:
@@ -22,7 +23,8 @@ public:
         const tinyMath::vec3f& _center1, 
         const float _time0, 
         const float _time1, 
-        const float _radius, const std::shared_ptr<Material> _material)
+        const float _radius, 
+        const std::shared_ptr<Material> _material)
             :center0(_center0), center1(_center1), time0(_time0), time1(_time1), radius(_radius), material(_material){}
 
     ~MovingSphere(){}
@@ -53,6 +55,19 @@ public:
         r.setFrontFace(ray, normal);
         r.material = this->material;
         return r;
+    }
+
+    virtual BoundingBox getBoundingBox(float time0, float time1) override {
+        BoundingBox bbox0 = BoundingBox(
+            center(time0) - tinyMath::vec3f(radius),
+            center(time0) + tinyMath::vec3f(radius)
+        );
+
+        BoundingBox bbox1 = BoundingBox(
+            center(time1) - tinyMath::vec3f(radius),
+            center(time1) + tinyMath::vec3f(radius)
+        );
+        return bbox0.combine(bbox1);
     }
 
 };

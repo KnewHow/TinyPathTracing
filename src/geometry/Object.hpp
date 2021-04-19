@@ -4,6 +4,8 @@
 
 #include "Ray.hpp"
 
+class BoundingBox;
+
 
 class Object {
 public:
@@ -15,4 +17,10 @@ public:
      * @return if the ray intersectes with the object, return the intersect result, otherwise return nullopt 
     */
     virtual std::optional<IntersectResult> intersect(const Ray& ray, float t_min, float t_max) = 0;
+    
+    /**
+     * Getting primitive geomerty bounding box. in this time, we add two timestamp to get moving object. 
+     * If your object static, don't have to use them.
+    */
+    virtual BoundingBox getBoundingBox(float time0, float time1) = 0;
 };

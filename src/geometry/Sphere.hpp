@@ -2,15 +2,23 @@
 
 #include "Object.hpp"
 #include "material/Material.hpp"
+#include "BoundingBox.hpp"
 
 class Sphere: public Object {
 public:
     const tinyMath::vec3f center;
     const float radius;
     const std::shared_ptr<Material> material;
+    BoundingBox bbox;
 
     Sphere(const tinyMath::vec3f& _center, const float& _radius, const std::shared_ptr<Material> _material)
-        :center(_center), radius(_radius), material(_material) {}
+        :center(_center), radius(_radius), material(_material) 
+    {
+        bbox = BoundingBox(
+            center - tinyMath::vec3f(radius),
+            center + tinyMath::vec3f(radius)
+        );
+    }
     
     virtual std::optional<IntersectResult> intersect(const Ray& ray, float t_min, float t_max) override {
         tinyMath::vec3f L = center - ray.o;
@@ -34,5 +42,9 @@ public:
         r.setFrontFace(ray, normal);
         r.material = this->material;
         return r;
+    }
+
+    virtual BoundingBox getBoundingBox(float time0, float time1) override {
+        return bbox;
     }
 };

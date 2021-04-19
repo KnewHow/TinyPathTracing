@@ -12,11 +12,14 @@
 
 #include "geometry/Sphere.hpp"
 #include "geometry/MovingSphere.hpp"
+#include "geometry/BoundingBox.hpp"
 
 #include "material/Material.hpp"
 #include "material/Diffuse.hpp"
 #include "material/Metal.hpp"
 #include "material/Dielectric.hpp"
+
+#include "accelerator/BVH.hpp"
 
 void random_scene(Scene& scene) {
     for(int a = -11; a < 11; a++) {
