@@ -28,13 +28,17 @@ struct BVHNode {
 class BVHAccelerator {
 public:
     /**
-     * construct bhv accelerator with primitive object and two time
+     * construct bhv accelerator with scene object and two time
     */
     BVHAccelerator(
         const std::vector<std::shared_ptr<Object>>& objs, float time0, float time1) {
         root = recursiveBuild(objs, time0, time1);
     }
     
+    /**
+     * Intersecting with BVH, if the ray intersect with bvh, it will return intersect result, otherwise return nullopt
+     * it also contains two parameters t_min and t_max to limit the hit point the `t`
+    */
     std::optional<IntersectResult> intersect(const Ray& ray, float t_min, float t_max) {
         if(root == nullptr) {
             return std::nullopt;
