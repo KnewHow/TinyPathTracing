@@ -49,8 +49,11 @@ public:
         
         tinyMath::vec3f hitPoint = ray.o + t * ray.d;
         tinyMath::vec3f normal = ((hitPoint - center(ray.time)) / radius).normalize();
+        auto uv = getUV(normal);
         IntersectResult r;
         r.t = t;
+        r.u = std::get<0>(uv);
+        r.v = std::get<1>(uv);
         r.coords = hitPoint;
         r.setFrontFace(ray, normal);
         r.material = this->material;
@@ -68,6 +71,15 @@ public:
             center(time1) + tinyMath::vec3f(radius)
         );
         return bbox0.combine(bbox1);
+    }
+
+private:
+    std::tuple<float, float> getUV(const tinyMath::vec3f& normal) {
+        float theta = std::acos(-normal.y);
+        float phi = std::atan2(-normal.z, normal.x) + M_PI;
+        float u = phi / (2 * M_PI);
+        float v = theta / M_PI;
+        return std::make_tuple(u, v);
     }
 
 };

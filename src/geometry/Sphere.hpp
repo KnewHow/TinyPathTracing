@@ -1,5 +1,8 @@
 #pragma once
 
+#include <tuple>
+#include <cmath>
+
 #include "Object.hpp"
 #include "material/Material.hpp"
 #include "BoundingBox.hpp"
@@ -36,15 +39,26 @@ public:
         
         tinyMath::vec3f hitPoint = ray.o + t * ray.d;
         tinyMath::vec3f normal = ((hitPoint - center) / radius).normalize();
+        auto uv = getUV(normal);
         IntersectResult r;
         r.t = t;
         r.coords = hitPoint;
         r.setFrontFace(ray, normal);
         r.material = this->material;
+        r.u = std::get<0>(uv);
+        r.v = std::get<1>(uv);
         return r;
     }
 
     virtual BoundingBox getBoundingBox(float time0, float time1) override {
         return bbox;
+    }
+private:
+    std::tuple<float, float> getUV(const tinyMath::vec3f& normal) {
+        float theta = std::acos(-normal.y);
+        float phi = std::atan2(-normal.z, normal.x) + M_PI;
+        float u = phi / (2 * M_PI);
+        float v = theta / M_PI;
+        return std::make_tuple(u, v);
     }
 };

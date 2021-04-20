@@ -51,6 +51,8 @@ struct IntersectResult {
     
     IntersectResult() {
         t = 0.0f;
+        u = 0.0f,
+        v = 0.0f;
         coords = tinyMath::vec3f(0.0);
         normal = tinyMath::vec3f(0.0);
         isFrontFace = false;
@@ -59,6 +61,8 @@ struct IntersectResult {
 
     ~IntersectResult(){}
     float t; // the t of o + t * d
+    float u; // the u, v coordinates in texture
+    float v;
     tinyMath::vec3f coords; // the hit points coords
     tinyMath::vec3f normal; // the hit points normal
     bool isFrontFace; // wheather ray is cast from outward

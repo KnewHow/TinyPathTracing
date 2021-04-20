@@ -21,7 +21,11 @@
 
 #include "accelerator/BVH.hpp"
 
-void random_scene(Scene& scene) {
+#include "texture/Texture.hpp"
+#include "texture/SolidColor.hpp"
+#include "texture/CheckerTexture.hpp"
+
+void addRandomObjects(Scene& scene) {
     for(int a = -11; a < 11; a++) {
         for(int b = -11; b < 11; b++) {
             float choose_mat = get_random_float();
@@ -61,7 +65,7 @@ int main() {
     float aperture = 0.1f;
     Camera camera(lookfrom, lookat, vup, 20, aspect_ratio, aperture, focus_dist, 0.0f, 1.0f);
     
-    std::shared_ptr<Material> mat_ground = std::make_shared<Diffuse>(tinyMath::vec3f(0.5f, 0.5f, 0.5f));
+    std::shared_ptr<Material> mat_ground = std::make_shared<Diffuse>(std::make_shared<CheckerTexture>(tinyMath::vec3f(0.2f, 0.3f, 0.1f), tinyMath::vec3f(0.9)));
     std::shared_ptr<Material> mat_1 = std::make_shared<Dielectric>(1.5f);
     std::shared_ptr<Material> mat_2 = std::make_shared<Diffuse>(tinyMath::vec3f(0.4f, 0.2f, 0.1f));
     std::shared_ptr<Material> mat_3 = std::make_shared<Metal>(tinyMath::vec3f(0.7f, 0.6f,0.5f), 0.0f);
@@ -72,11 +76,12 @@ int main() {
     std::shared_ptr<Object> obj_3 = std::make_shared<Sphere>(tinyMath::vec3f(4.0f, 1.0f, 0.0f), 1.0f, mat_3);
     
     Scene scene;
+    addRandomObjects(scene);
     scene.addObject(obj_ground);
     scene.addObject(obj_1);
     scene.addObject(obj_2);
     scene.addObject(obj_3);
-    random_scene(scene);
+    scene.buildBVH(0.0f, 1.0f);
     
     
     Renderer render(image);

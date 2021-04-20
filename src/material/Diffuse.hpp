@@ -2,11 +2,15 @@
 
 #include "Material.hpp"
 #include "geometry/Ray.hpp"
+#include "texture/Texture.hpp"
+#include "texture/SolidColor.hpp"
 
 class Diffuse: public Material {
 public:
     Diffuse(const tinyMath::vec3f& color)
-        :albedo(color){}
+        :texture(std::make_shared<SolidColor>(color)){}
+    Diffuse(const std::shared_ptr<Texture> _texture)
+        :texture(_texture){}
     ~Diffuse(){}
     virtual bool scatter(
         const Ray& ray, 
@@ -20,10 +24,10 @@ public:
             dir = intersect.normal;
         }
         scattered = Ray(intersect.coords, dir, ray.time);
-        attenuation = albedo;
+        attenuation = texture->value(intersect.u, intersect.v, intersect.coords);
         return true;
     }
 
 private:
-    const tinyMath::vec3f albedo;
+    std::shared_ptr<Texture> texture;
 };

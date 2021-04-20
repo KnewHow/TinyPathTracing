@@ -8,6 +8,7 @@
 #include "geometry/Object.hpp"
 #include "material/Material.hpp"
 #include "geometry/Ray.hpp"
+#include "accelerator/BVH.hpp"
 
 class Scene {
 public:
@@ -17,6 +18,9 @@ public:
         objects.push_back(object);
     }
 
+    void buildBVH(float time0, float time1) {
+        bvh = std::make_shared<BVHAccelerator>(objects, time0, time1);
+    }
 
     tinyMath::vec3f castRay(const Ray& ray, int depth) const {
         if(depth <=0) {
@@ -42,21 +46,13 @@ public:
 private:
 
     std::optional<IntersectResult> getIntersect(const Ray& ray) const{
-        std::optional<IntersectResult> r = std::nullopt;
-        for(const auto& obj: objects) {
-            std::optional<IntersectResult> p = obj->intersect(ray, 0.001f, std::numeric_limits<float>::infinity());
-            if(p.has_value()) {
-                if(r.has_value()) {
-                    if(p.value().t < r.value().t) {
-                        r = p;
-                    }
-                } else {
-                    r = p;
-                }
-            }
+        if(bvh == nullptr) {
+            return std::nullopt;
+        } else {
+            return bvh->intersect(ray, 0.001f, std::numeric_limits<float>::infinity());
         }
-        return r;
     }
 
     std::vector<std::shared_ptr<Object>> objects;
+    std::shared_ptr<BVHAccelerator> bvh;
 };

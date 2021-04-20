@@ -3,6 +3,7 @@
 #include <memory>
 #include <vector>
 #include <algorithm>
+#include <chrono>
 
 #include "geometry/BoundingBox.hpp"
 #include "geometry/Object.hpp"
@@ -32,7 +33,10 @@ public:
     */
     BVHAccelerator(
         const std::vector<std::shared_ptr<Object>>& objs, float time0, float time1) {
+        auto begin = std::chrono::system_clock::now();
         root = recursiveBuild(objs, time0, time1);
+        auto end = std::chrono::system_clock::now();
+        printTimeTook(begin, end, "build BVH");
     }
     
     /**
