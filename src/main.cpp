@@ -24,6 +24,9 @@
 #include "texture/Texture.hpp"
 #include "texture/SolidColor.hpp"
 #include "texture/CheckerTexture.hpp"
+#include "texture/NoiseTexture.hpp"
+
+#include "noise/PerlinNoise.hpp"
 
 void addRandomObjects(Scene& scene) {
     for(int a = -11; a < 11; a++) {
@@ -81,7 +84,7 @@ int main() {
     
     Scene scene;
     
-    switch (2)
+    switch (3)
     {
     case 1:
         lookfrom = tinyMath::vec3f(13.0f, 2.0f, 3.0f);
@@ -109,8 +112,22 @@ int main() {
         scene.addObject(std::make_shared<Sphere>(tinyMath::vec3f(0.0f, -10.0f, 0.0f), 10.0f, mat_ground));
         scene.addObject(std::make_shared<Sphere>(tinyMath::vec3f(0.0f, 10.0f, 0.0f), 10.0f, mat_ground));
         break;
-    }
     
+    case 3:
+        lookfrom = tinyMath::vec3f(13.0f, 2.0f, 3.0f);
+        lookat = tinyMath::vec3f(0.0f, 0.0f, 0.0f);
+        vup = tinyMath::vec3f(0.0f, 1.0f, 0.0f);
+        focus_dist = 10.0f;
+        aperture = 0.0f;
+        fov = 20.0f;
+        auto noiseTex = std::make_shared<NoiseTexture>(4);
+        scene.addObject(std::make_shared<Sphere>(tinyMath::vec3f(0.0f, -1000.0f, 0.0f), 1000.0f, std::make_shared<Diffuse>(noiseTex)));
+        scene.addObject(std::make_shared<Sphere>(tinyMath::vec3f(0.0f, 2.0f, 0.0f), 2.0f, std::make_shared<Diffuse>(noiseTex)));
+    
+        break;
+    }
+
+   
     scene.buildBVH(0.0f, 1.0f);
     Camera camera(lookfrom, lookat, vup, fov, aspect_ratio, aperture, focus_dist, 0.0f, 1.0f, max_camera_samples, max_ray_bounce_times);
     Renderer render(image);

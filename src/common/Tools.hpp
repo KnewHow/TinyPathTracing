@@ -27,6 +27,10 @@ inline float get_random_float() {
     return get_random_float(0.0f, 1.0f);
 }
 
+inline int get_random_int(int min, int max) {
+    return static_cast<int>(get_random_float(min, max + 1));
+}
+
 inline tinyMath::vec3f get_random_vector(float min, float max) {
     return tinyMath::vec3f(
         get_random_float(min, max),

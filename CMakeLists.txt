@@ -20,6 +20,8 @@ file(GLOB SOURCES
     "${SRC_DIR}/accelerator/*.cpp"
     "${SRC_DIR}/texture/*.hpp"
     "${SRC_DIR}/texture/*.cpp"
+    "${SRC_DIR}/noise/*.hpp"
+    "${SRC_DIR}/noise/*.cpp"
 )
 
 # Executable definition and properties
