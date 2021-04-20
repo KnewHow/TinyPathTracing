@@ -56,15 +56,18 @@ void addRandomObjects(Scene& scene) {
 int main() {
     int width = 400;
     float aspect_ratio = 16.0f / 9.0f;
+    const int max_camera_samples = 32;
+    const int max_ray_bounce_times = 8;
     std::string filepath = "./result.ppm";
     std::shared_ptr<Image> image = std::make_shared<Image>(width, aspect_ratio, filepath);
-    tinyMath::vec3f lookfrom = tinyMath::vec3f(13.0f, 2.0f, 3.0f);
-    tinyMath::vec3f lookat = tinyMath::vec3f(0.0f, 0.0f, 0.0f);
-    tinyMath::vec3f vup = tinyMath::vec3f(0.0f, 1.0f, 0.0f);
-    float focus_dist = 10.0f;
-    float aperture = 0.1f;
-    Camera camera(lookfrom, lookat, vup, 20, aspect_ratio, aperture, focus_dist, 0.0f, 1.0f);
     
+    tinyMath::vec3f lookfrom;
+    tinyMath::vec3f lookat;
+    tinyMath::vec3f vup;
+    float focus_dist;
+    float aperture;
+    float fov;
+
     std::shared_ptr<Material> mat_ground = std::make_shared<Diffuse>(std::make_shared<CheckerTexture>(tinyMath::vec3f(0.2f, 0.3f, 0.1f), tinyMath::vec3f(0.9)));
     std::shared_ptr<Material> mat_1 = std::make_shared<Dielectric>(1.5f);
     std::shared_ptr<Material> mat_2 = std::make_shared<Diffuse>(tinyMath::vec3f(0.4f, 0.2f, 0.1f));
@@ -74,16 +77,42 @@ int main() {
     std::shared_ptr<Object> obj_1 = std::make_shared<Sphere>(tinyMath::vec3f(0.0f, 1.0f, 0.0f), 1.0f, mat_1);
     std::shared_ptr<Object> obj_2 = std::make_shared<Sphere>(tinyMath::vec3f(-4.0f, 1.0f, 0.0f), 1.0f, mat_2); // make bubble use radisu 0.5 and radius -0.4
     std::shared_ptr<Object> obj_3 = std::make_shared<Sphere>(tinyMath::vec3f(4.0f, 1.0f, 0.0f), 1.0f, mat_3);
+
     
     Scene scene;
-    addRandomObjects(scene);
-    scene.addObject(obj_ground);
-    scene.addObject(obj_1);
-    scene.addObject(obj_2);
-    scene.addObject(obj_3);
+    
+    switch (2)
+    {
+    case 1:
+        lookfrom = tinyMath::vec3f(13.0f, 2.0f, 3.0f);
+        lookat = tinyMath::vec3f(0.0f, 0.0f, 0.0f);
+        vup = tinyMath::vec3f(0.0f, 1.0f, 0.0f);
+        focus_dist = 10.0f;
+        aperture = 0.1f;
+        fov = 20.0f;
+
+        addRandomObjects(scene);
+        scene.addObject(obj_ground);
+        scene.addObject(obj_1);
+        scene.addObject(obj_2);
+        scene.addObject(obj_3);
+        break;
+
+    case 2:
+        lookfrom = tinyMath::vec3f(13.0f, 2.0f, 3.0f);
+        lookat = tinyMath::vec3f(0.0f, 0.0f, 0.0f);
+        vup = tinyMath::vec3f(0.0f, 1.0f, 0.0f);
+        focus_dist = 10.0f;
+        aperture = 0.0f;
+        fov = 20.0f;
+
+        scene.addObject(std::make_shared<Sphere>(tinyMath::vec3f(0.0f, -10.0f, 0.0f), 10.0f, mat_ground));
+        scene.addObject(std::make_shared<Sphere>(tinyMath::vec3f(0.0f, 10.0f, 0.0f), 10.0f, mat_ground));
+        break;
+    }
+    
     scene.buildBVH(0.0f, 1.0f);
-    
-    
+    Camera camera(lookfrom, lookat, vup, fov, aspect_ratio, aperture, focus_dist, 0.0f, 1.0f, max_camera_samples, max_ray_bounce_times);
     Renderer render(image);
     auto begin = std::chrono::system_clock::now();
     render.render(scene, camera);

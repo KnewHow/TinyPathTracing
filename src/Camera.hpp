@@ -22,8 +22,12 @@ public:
         float aperture, 
         float focus_dist, 
         float _time0 = 0.0f, 
-        float _time1 = 0.0f
+        float _time1 = 0.0f,
+        int _samples_per_pixel = 1,
+        int _ray_bounce_times = 8
     )
+        : samples_per_pixel(_samples_per_pixel), 
+          ray_bounce_times(_ray_bounce_times)
     {
 
         w = (lookfrom - lookat).normalize();
@@ -61,6 +65,6 @@ private:
     float time0, time1; // the time of camera shutter open/close 
 
 public:
-    const int samples_per_pixel = 32;
-
+    const int samples_per_pixel;
+    const int ray_bounce_times;
 };
