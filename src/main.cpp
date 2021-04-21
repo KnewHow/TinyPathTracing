@@ -25,6 +25,7 @@
 #include "texture/SolidColor.hpp"
 #include "texture/CheckerTexture.hpp"
 #include "texture/NoiseTexture.hpp"
+#include "texture/ImageTexture.hpp"
 
 #include "noise/PerlinNoise.hpp"
 
@@ -71,6 +72,9 @@ int main() {
     float aperture;
     float fov;
 
+    auto noiseTex = std::make_shared<NoiseTexture>(4);
+    auto imageTex = std::make_shared<ImageTexture>("../res/earthmap.jpg");
+
     std::shared_ptr<Material> mat_ground = std::make_shared<Diffuse>(std::make_shared<CheckerTexture>(tinyMath::vec3f(0.2f, 0.3f, 0.1f), tinyMath::vec3f(0.9)));
     std::shared_ptr<Material> mat_1 = std::make_shared<Dielectric>(1.5f);
     std::shared_ptr<Material> mat_2 = std::make_shared<Diffuse>(tinyMath::vec3f(0.4f, 0.2f, 0.1f));
@@ -84,7 +88,7 @@ int main() {
     
     Scene scene;
     
-    switch (3)
+    switch (4)
     {
     case 1:
         lookfrom = tinyMath::vec3f(13.0f, 2.0f, 3.0f);
@@ -120,10 +124,19 @@ int main() {
         focus_dist = 10.0f;
         aperture = 0.0f;
         fov = 20.0f;
-        auto noiseTex = std::make_shared<NoiseTexture>(4);
+        
         scene.addObject(std::make_shared<Sphere>(tinyMath::vec3f(0.0f, -1000.0f, 0.0f), 1000.0f, std::make_shared<Diffuse>(noiseTex)));
         scene.addObject(std::make_shared<Sphere>(tinyMath::vec3f(0.0f, 2.0f, 0.0f), 2.0f, std::make_shared<Diffuse>(noiseTex)));
+        break;
     
+    case 4:
+        lookfrom = tinyMath::vec3f(13.0f, 2.0f, 3.0f);
+        lookat = tinyMath::vec3f(0.0f, 0.0f, 0.0f);
+        vup = tinyMath::vec3f(0.0f, 1.0f, 0.0f);
+        focus_dist = 10.0f;
+        aperture = 0.0f;
+        fov = 20.0f;
+        scene.addObject(std::make_shared<Sphere>(tinyMath::vec3f(0.0f, 0.0f, 0.0f), 2.0f, std::make_shared<Diffuse>(imageTex)));
         break;
     }
 

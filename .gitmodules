@@ -2,3 +2,6 @@
 	path = lib/TinyMath
 	url = https://github.com/KnewHow/TinyMath.git
 	branch = 1.0.0
+[submodule "lib/stb"]
+	path = lib/stb
+	url = git@github.com:nothings/stb.git

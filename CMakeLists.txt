@@ -33,6 +33,10 @@ set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 17)
 set(TinyMath_DIR "${LIB_DIR}/TinyMath")
 target_include_directories(${PROJECT_NAME} PRIVATE "${TinyMath_DIR}")
 
+# stb
+set(STB_DIR "${LIB_DIR}/stb")
+target_include_directories(${PROJECT_NAME} PRIVATE "${STB_DIR}")
+
 # open mp
 find_package(OpenMP)
 if (OPENMP_FOUND)
