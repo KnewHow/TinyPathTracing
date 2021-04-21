@@ -59,13 +59,26 @@ void addRandomObjects(Scene& scene) {
     }
 }
 
+void CornellBox(Scene& scene) {
+    auto red = std::make_shared<Diffuse>(tinyMath::vec3f(.65, .05, .05));
+    auto white = std::make_shared<Diffuse>(tinyMath::vec3f(.73, .73, .73));
+    auto green = std::make_shared<Diffuse>(tinyMath::vec3f(.12, .45, .15));
+    auto light = std::make_shared<DiffuseLight>(tinyMath::vec3f(15));
+
+    scene.addObject(std::make_shared<YZRectangle>(0, 555, 0, 555, 555, green));
+    scene.addObject(std::make_shared<YZRectangle>(0, 555, 0, 555, 0, red));
+    scene.addObject(std::make_shared<XZRectangle>(213, 343, 227, 332, 554, light));
+    scene.addObject(std::make_shared<XZRectangle>(0, 555, 0, 555, 0, white));
+    scene.addObject(std::make_shared<XZRectangle>(0, 555, 0, 555, 555, white));
+    scene.addObject(std::make_shared<XYRectangle>(0, 555, 0, 555, 555, white));
+}
+
 int main() {
     int width = 400;
     float aspect_ratio = 16.0f / 9.0f;
     const int max_camera_samples = 32;
     const int max_ray_bounce_times = 8;
     std::string filepath = "./result.ppm";
-    std::shared_ptr<Image> image = std::make_shared<Image>(width, aspect_ratio, filepath);
     
     tinyMath::vec3f lookfrom;
     tinyMath::vec3f lookat;
@@ -91,7 +104,7 @@ int main() {
     
     Scene scene(tinyMath::vec3f(0.70, 0.80, 1.00));
     
-    switch (5)
+    switch (6)
     {
     case 1:
         lookfrom = tinyMath::vec3f(13.0f, 2.0f, 3.0f);
@@ -154,10 +167,23 @@ int main() {
         scene.addObject(std::make_shared<XYRectangle>(3, 5, 1, 3, -2, mat_light_diffuse));
         scene.addObject(std::make_shared<Sphere>(tinyMath::vec3f(0.0f, 6.0f, 0.0f), 2.0f, mat_light_diffuse));
         break;
+    
+    case 6:
+        CornellBox(scene);
+        scene.setBackground(tinyMath::vec3f(0, 0, 0));
+
+        aspect_ratio = 1.0f;
+        width = 600;
+        lookfrom = tinyMath::vec3f(278, 278, -800);
+        lookat = tinyMath::vec3f(278, 278, 0);
+        vup = tinyMath::vec3f(0.0f, 1.0f, 0.0f);
+        focus_dist = 10.0f;
+        aperture = 0.0f;
+        fov = 40.0f;
     }
 
-   
     scene.buildBVH(0.0f, 1.0f);
+    std::shared_ptr<Image> image = std::make_shared<Image>(width, aspect_ratio, filepath);
     Camera camera(lookfrom, lookat, vup, fov, aspect_ratio, aperture, focus_dist, 0.0f, 1.0f, max_camera_samples, max_ray_bounce_times);
     Renderer render(image);
     auto begin = std::chrono::system_clock::now();
