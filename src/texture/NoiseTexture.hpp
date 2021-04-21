@@ -17,7 +17,7 @@ public:
     ~NoiseTexture(){}
     
     virtual tinyMath::vec3f value(float u, float v, const tinyMath::vec3f& point) const override {
-        return tinyMath::vec3f(1.0f) * noise->noise(scale * point);
+        return tinyMath::vec3f(1.0f) * 0.5 * (1 + std::sin(scale * point.z + 10 * noise->turb(point)));
     }
 
 private:

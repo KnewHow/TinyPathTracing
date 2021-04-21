@@ -10,9 +10,9 @@ class PerlinNoise {
 public:
     
     PerlinNoise(){
-        ranfloat = new float[point_counter];
+        ranfloat = new tinyMath::vec3f[point_counter];
         for(int i = 0; i < point_counter; i++) {
-            ranfloat[i] = get_random_float();
+            ranfloat[i] = get_random_vector(-1.0f, 1.0f).normalize();
         }
         perm_x = perlin_generate_perm();
         perm_y = perlin_generate_perm();
@@ -26,6 +26,18 @@ public:
         delete[] perm_z;
     }
 
+    float turb(const tinyMath::vec3f& p, int depth = 7) {
+        float sum = 0.0f;
+        tinyMath::vec3f temp_p = p;
+        float weight = 1.0f;
+        for(int i = 0; i < depth; i++) {
+            sum += weight * noise(temp_p);
+            weight *= 0.5;
+            temp_p *= 2;
+        }
+        return std::fabs(sum);
+    }
+
     float noise(const tinyMath::vec3f& p) {
         float u = p.x - std::floor(p.x);
         float v = p.y - std::floor(p.y);
@@ -35,7 +47,7 @@ public:
         int j = static_cast<int>(std::floor(p.y));
         int k = static_cast<int>(std::floor(p.z));
 
-        float c[2][2][2];
+        tinyMath::vec3f c[2][2][2];
         for(int di = 0; di < 2; di++) {
             for(int dj = 0; dj < 2; dj++) {
                 for(int dk = 0; dk < 2; dk++) {
@@ -68,17 +80,18 @@ private:
         }
     }
 
-    float triliner_interp(float c[2][2][2], float u, float v, float w) {
+    float triliner_interp(tinyMath::vec3f c[2][2][2], float u, float v, float w) {
         float sum = 0.0f;
-        u = hermitianSmoothing(u);
-        v = hermitianSmoothing(v);
-        w = hermitianSmoothing(w);
+        float uu = hermitianSmoothing(u);
+        float vv = hermitianSmoothing(v);
+        float ww = hermitianSmoothing(w);
         for(int i = 0; i < 2; i++) {
             for(int j = 0; j < 2; j++) {
                 for(int k = 0; k < 2; k++) {
-                    sum += (i * u + (1 - i) * (1 - u)) *
-                           (j * v + (1 - j) * (1 - v)) *
-                           (k * w + (1 - k) * (1 - w)) * c[i][j][k];
+                    tinyMath::vec3f weigh = tinyMath::vec3f(u - i, v - j, w - k);
+                    sum += (i * uu + (1 - i) * (1 - uu)) *
+                           (j * vv + (1 - j) * (1 - vv)) *
+                           (k * ww + (1 - k) * (1 - ww)) * tinyMath::dotProduct(c[i][j][k], weigh);
                 }
             }
         }
@@ -90,7 +103,7 @@ private:
     }
 
     const int point_counter = 256;
-    float* ranfloat;
+    tinyMath::vec3f* ranfloat;
     int* perm_x;
     int* perm_y;
     int* perm_z;

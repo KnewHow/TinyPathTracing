@@ -34,9 +34,9 @@ struct Image {
             for(int i = 0; i < width; i++) {
                 int idx = j * width + i;
                 tinyMath::vec3f rgb = framebuff[idx];
-                int r = clamp(std::sqrt(rgb.x), 0.0f, 1.0f) * 255.0f; // gamma correction
-                int g = clamp(std::sqrt(rgb.y), 0.0f, 1.0f) * 255.0f;
-                int b = clamp(std::sqrt(rgb.z), 0.0f, 1.0f) * 255.0f;
+                int r = static_cast<int>(clamp(std::sqrt(rgb.x), 0.0f, 0.999) * 256.0f); // gamma correction
+                int g = static_cast<int>(clamp(std::sqrt(rgb.y), 0.0f, 0.999) * 256.0f);
+                int b = static_cast<int>(clamp(std::sqrt(rgb.z), 0.0f, 0.999) * 256.0f);
                 fo << r << " " << g << " " << b << std::endl;
             }
         }
