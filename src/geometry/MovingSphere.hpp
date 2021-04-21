@@ -47,7 +47,7 @@ public:
         if(t > t_max || t < t_min) 
             return std::nullopt;
         
-        tinyMath::vec3f hitPoint = ray.o + t * ray.d;
+        tinyMath::vec3f hitPoint = ray.at(t);
         tinyMath::vec3f normal = ((hitPoint - center(ray.time)) / radius).normalize();
         auto uv = getUV(normal);
         IntersectResult r;

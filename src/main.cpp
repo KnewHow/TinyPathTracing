@@ -13,11 +13,13 @@
 #include "geometry/Sphere.hpp"
 #include "geometry/MovingSphere.hpp"
 #include "geometry/BoundingBox.hpp"
+#include "geometry/AxisAlignedRectangle.hpp"
 
 #include "material/Material.hpp"
 #include "material/Diffuse.hpp"
 #include "material/Metal.hpp"
 #include "material/Dielectric.hpp"
+#include "material/DiffuseLight.hpp"
 
 #include "accelerator/BVH.hpp"
 
@@ -75,20 +77,21 @@ int main() {
     auto noiseTex = std::make_shared<NoiseTexture>(4);
     auto imageTex = std::make_shared<ImageTexture>("../res/earthmap.jpg");
 
-    std::shared_ptr<Material> mat_ground = std::make_shared<Diffuse>(std::make_shared<CheckerTexture>(tinyMath::vec3f(0.2f, 0.3f, 0.1f), tinyMath::vec3f(0.9)));
-    std::shared_ptr<Material> mat_1 = std::make_shared<Dielectric>(1.5f);
-    std::shared_ptr<Material> mat_2 = std::make_shared<Diffuse>(tinyMath::vec3f(0.4f, 0.2f, 0.1f));
-    std::shared_ptr<Material> mat_3 = std::make_shared<Metal>(tinyMath::vec3f(0.7f, 0.6f,0.5f), 0.0f);
+    auto mat_ground = std::make_shared<Diffuse>(std::make_shared<CheckerTexture>(tinyMath::vec3f(0.2f, 0.3f, 0.1f), tinyMath::vec3f(0.9)));
+    auto mat_1 = std::make_shared<Dielectric>(1.5f);
+    auto mat_2 = std::make_shared<Diffuse>(tinyMath::vec3f(0.4f, 0.2f, 0.1f));
+    auto mat_3 = std::make_shared<Metal>(tinyMath::vec3f(0.7f, 0.6f,0.5f), 0.0f);
+    auto mat_light_diffuse = std::make_shared<DiffuseLight>(tinyMath::vec3f(4));
 
-    std::shared_ptr<Object> obj_ground = std::make_shared<Sphere>(tinyMath::vec3f(0.0f, -1000.0f, 0.0f), 1000.0f, mat_ground);
-    std::shared_ptr<Object> obj_1 = std::make_shared<Sphere>(tinyMath::vec3f(0.0f, 1.0f, 0.0f), 1.0f, mat_1);
-    std::shared_ptr<Object> obj_2 = std::make_shared<Sphere>(tinyMath::vec3f(-4.0f, 1.0f, 0.0f), 1.0f, mat_2); // make bubble use radisu 0.5 and radius -0.4
-    std::shared_ptr<Object> obj_3 = std::make_shared<Sphere>(tinyMath::vec3f(4.0f, 1.0f, 0.0f), 1.0f, mat_3);
+    auto obj_ground = std::make_shared<Sphere>(tinyMath::vec3f(0.0f, -1000.0f, 0.0f), 1000.0f, mat_ground);
+    auto obj_1 = std::make_shared<Sphere>(tinyMath::vec3f(0.0f, 1.0f, 0.0f), 1.0f, mat_1);
+    auto obj_2 = std::make_shared<Sphere>(tinyMath::vec3f(-4.0f, 1.0f, 0.0f), 1.0f, mat_2); // make bubble use radisu 0.5 and radius -0.4
+    auto obj_3 = std::make_shared<Sphere>(tinyMath::vec3f(4.0f, 1.0f, 0.0f), 1.0f, mat_3);
 
     
-    Scene scene;
+    Scene scene(tinyMath::vec3f(0.70, 0.80, 1.00));
     
-    switch (4)
+    switch (5)
     {
     case 1:
         lookfrom = tinyMath::vec3f(13.0f, 2.0f, 3.0f);
@@ -124,7 +127,6 @@ int main() {
         focus_dist = 10.0f;
         aperture = 0.0f;
         fov = 20.0f;
-        
         scene.addObject(std::make_shared<Sphere>(tinyMath::vec3f(0.0f, -1000.0f, 0.0f), 1000.0f, std::make_shared<Diffuse>(noiseTex)));
         scene.addObject(std::make_shared<Sphere>(tinyMath::vec3f(0.0f, 2.0f, 0.0f), 2.0f, std::make_shared<Diffuse>(noiseTex)));
         break;
@@ -137,6 +139,20 @@ int main() {
         aperture = 0.0f;
         fov = 20.0f;
         scene.addObject(std::make_shared<Sphere>(tinyMath::vec3f(0.0f, 0.0f, 0.0f), 2.0f, std::make_shared<Diffuse>(imageTex)));
+        break;
+    
+    case 5:
+        lookfrom = tinyMath::vec3f(26.0f, 3.0f, 6.0f);
+        lookat = tinyMath::vec3f(0.0f, 2.0f, 0.0f);
+        vup = tinyMath::vec3f(0.0f, 1.0f, 0.0f);
+        focus_dist = 10.0f;
+        aperture = 0.0f;
+        fov = 20.0f;
+        scene.setBackground(tinyMath::vec3f(0, 0, 0));
+        scene.addObject(std::make_shared<Sphere>(tinyMath::vec3f(0.0f, -1000.0f, 0.0f), 1000.0f, std::make_shared<Diffuse>(noiseTex)));
+        scene.addObject(std::make_shared<Sphere>(tinyMath::vec3f(0.0f, 2.0f, 0.0f), 2.0f, std::make_shared<Diffuse>(noiseTex)));
+        scene.addObject(std::make_shared<XYRectangle>(3, 5, 1, 3, -2, mat_light_diffuse));
+        scene.addObject(std::make_shared<Sphere>(tinyMath::vec3f(0.0f, 6.0f, 0.0f), 2.0f, mat_light_diffuse));
         break;
     }
 

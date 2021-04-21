@@ -17,7 +17,7 @@ public:
         #pragma omp parallel for
         for(int j = image->height - 1; j >= 0; j--) {
             for(int i = image->width - 1; i >= 0; i--) {
-                 tinyMath::vec3f r = tinyMath::vec3f(0.0f);
+                tinyMath::vec3f r = tinyMath::vec3f(0.0f);
                 for(int k = 0; k < camera.samples_per_pixel; k++) {
                     float u = (float) (i + get_random_float()) / (image->width - 1);
                     float v = (float) (j + get_random_float()) / (image->height - 1);

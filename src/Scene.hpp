@@ -12,14 +12,22 @@
 
 class Scene {
 public:
-    Scene(){};
+    Scene(){
+        background = tinyMath::vec3f(0.0f);
+    };
+    Scene(const tinyMath::vec3f& _background): background(_background) {}
     ~Scene(){};
+    
     void addObject(std::shared_ptr<Object> object) {
         objects.push_back(object);
     }
 
     void buildBVH(float time0, float time1) {
         bvh = std::make_shared<BVHAccelerator>(objects, time0, time1);
+    }
+
+    void setBackground(const tinyMath::vec3f& _background) {
+        background = _background;
     }
 
     tinyMath::vec3f castRay(const Ray& ray, int depth) const {
@@ -30,17 +38,18 @@ public:
         std::optional<IntersectResult> r = getIntersect(ray);
         if(r.has_value()) {
             auto p = r.value();
+            tinyMath::vec3f emitColor = p.material->emitted(p.u, p.v, p.coords);
             Ray newRay;
             tinyMath::vec3f attenuation;
             if(p.material->scatter(ray, p, attenuation, newRay)) {
-                return attenuation * castRay(newRay, depth - 1);
+                return emitColor + attenuation * castRay(newRay, depth - 1);
             } else {
-                return tinyMath::vec3f(0.0f);
+                return emitColor;
             }
+        } else {
+            return background;
         }
-       
-        float t = 0.5 * (ray.d.y + 1.0f);
-        return (1.0f - t) * tinyMath::vec3f(1.0) + t * tinyMath::vec3f(0.5f, 0.7f, 1.0f);
+
     }
 
 private:
@@ -55,4 +64,5 @@ private:
 
     std::vector<std::shared_ptr<Object>> objects;
     std::shared_ptr<BVHAccelerator> bvh;
+    tinyMath::vec3f background;
 };

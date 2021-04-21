@@ -21,11 +21,10 @@ struct Ray
         :o(origin), d(direction), time(_time){}
     Ray()
         :o(tinyMath::vec3f(0.0f)), d(tinyMath::vec3f(0.0f)), time(0.0f){}
-    
-    tinyMath::vec3f o;
-    tinyMath::vec3f d;
-    float time;
 
+    tinyMath::vec3f at(float t) const {
+        return o + t * d;
+    }
 
     static inline Ray sampleWithHemisphere(const tinyMath::vec3f& hitPoint, const tinyMath::vec3f& hitNormal) {
         tinyMath::vec3f random_dir = get_random_vector_in_unit_sphere();
@@ -42,6 +41,10 @@ struct Ray
         d = ray.d;
         return *this;
     }
+
+    tinyMath::vec3f o;
+    tinyMath::vec3f d;
+    float time;
 };
 
 /**
