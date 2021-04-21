@@ -14,6 +14,9 @@
 #include "geometry/MovingSphere.hpp"
 #include "geometry/BoundingBox.hpp"
 #include "geometry/AxisAlignedRectangle.hpp"
+#include "geometry/AxisAlignedBox.hpp"
+#include "geometry/transform/Translation.hpp"
+#include "geometry/transform/Rotation.hpp"
 
 #include "material/Material.hpp"
 #include "material/Diffuse.hpp"

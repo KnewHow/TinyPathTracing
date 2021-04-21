@@ -23,7 +23,7 @@ public:
         );
     }
     
-    virtual std::optional<IntersectResult> intersect(const Ray& ray, float t_min, float t_max) override {
+    virtual std::optional<IntersectResult> intersect(const Ray& ray, float t_min, float t_max) const override {
         tinyMath::vec3f L = center - ray.o;
         float tca = tinyMath::dotProduct(L, ray.d);
         float d2 = tinyMath::dotProduct(L, L) - tca * tca;
@@ -50,11 +50,11 @@ public:
         return r;
     }
 
-    virtual BoundingBox getBoundingBox(float time0, float time1) override {
+    virtual BoundingBox getBoundingBox(float time0, float time1) const override {
         return bbox;
     }
 private:
-    std::tuple<float, float> getUV(const tinyMath::vec3f& normal) {
+    std::tuple<float, float> getUV(const tinyMath::vec3f& normal) const {
         float theta = std::acos(-normal.y);
         float phi = std::atan2(-normal.z, normal.x) + M_PI;
         float u = phi / (2 * M_PI);

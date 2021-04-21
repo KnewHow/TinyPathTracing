@@ -29,11 +29,11 @@ public:
 
     ~MovingSphere(){}
 
-    tinyMath::vec3f center(float time) {
+    tinyMath::vec3f center(float time) const {
         return center0 + ((time - time0) / (time1 - time0)) * (center1 - center0);
     }
 
-    virtual std::optional<IntersectResult> intersect(const Ray& ray, float t_min, float t_max) {
+    virtual std::optional<IntersectResult> intersect(const Ray& ray, float t_min, float t_max) const override {
         tinyMath::vec3f L = center(ray.time) - ray.o;
         float tca = tinyMath::dotProduct(L, ray.d);
         float d2 = tinyMath::dotProduct(L, L) - tca * tca;
@@ -60,7 +60,7 @@ public:
         return r;
     }
 
-    virtual BoundingBox getBoundingBox(float time0, float time1) override {
+    virtual BoundingBox getBoundingBox(float time0, float time1) const override {
         BoundingBox bbox0 = BoundingBox(
             center(time0) - tinyMath::vec3f(radius),
             center(time0) + tinyMath::vec3f(radius)
@@ -74,7 +74,7 @@ public:
     }
 
 private:
-    std::tuple<float, float> getUV(const tinyMath::vec3f& normal) {
+    std::tuple<float, float> getUV(const tinyMath::vec3f& normal) const {
         float theta = std::acos(-normal.y);
         float phi = std::atan2(-normal.z, normal.x) + M_PI;
         float u = phi / (2 * M_PI);

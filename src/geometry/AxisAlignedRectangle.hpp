@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "Object.hpp"
+#include "BoundingBox.hpp"
 #include "material/Material.hpp"
 
 /**
@@ -17,7 +18,7 @@ public:
         :x0(_x0), x1(_x1), y0(_y0), y1(_y1), z(_z), material(_material){}
     ~XYRectangle(){}
 
-    virtual std::optional<IntersectResult> intersect(const Ray& ray, float t_min, float t_max) override {
+    virtual std::optional<IntersectResult> intersect(const Ray& ray, float t_min, float t_max) const override {
         float t = (z - ray.o.z) / ray.d.z;
         if(t < t_min || t > t_max) {
             return std::nullopt;
@@ -44,7 +45,7 @@ public:
         return r;
     }
 
-    virtual BoundingBox getBoundingBox(float time0, float time1) override {
+    virtual BoundingBox getBoundingBox(float time0, float time1) const override {
         BoundingBox bbox(tinyMath::vec3f(x0, y0, z - DELTA_RECTANGLE_THICKNESS), tinyMath::vec3f(x1, y1, z + DELTA_RECTANGLE_THICKNESS));
         return bbox;
     }
@@ -62,7 +63,7 @@ public:
         :x0(_x0), x1(_x1), z0(_z0), z1(_z1), y(_y), material(_material){}
     ~XZRectangle(){}
    
-    virtual std::optional<IntersectResult> intersect(const Ray& ray, float t_min, float t_max) override {
+    virtual std::optional<IntersectResult> intersect(const Ray& ray, float t_min, float t_max) const override {
         float t = (y - ray.o.y) / ray.d.y;
         if(t < t_min || t > t_max) {
             return std::nullopt;
@@ -90,7 +91,7 @@ public:
         return r;
     }
 
-    virtual BoundingBox getBoundingBox(float time0, float time1) override {
+    virtual BoundingBox getBoundingBox(float time0, float time1) const override {
         BoundingBox bbox(tinyMath::vec3f(x0, y - DELTA_RECTANGLE_THICKNESS, z0), tinyMath::vec3f(x1, y + DELTA_RECTANGLE_THICKNESS, z1));
         return bbox;
     }
@@ -106,7 +107,7 @@ public:
         :y0(_y0), y1(_y1), z0(_z0), z1(_z1), x(_x), material(_material){}
     ~YZRectangle(){}
     
-    virtual std::optional<IntersectResult> intersect(const Ray& ray, float t_min, float t_max) override {
+    virtual std::optional<IntersectResult> intersect(const Ray& ray, float t_min, float t_max) const override {
         float t = (x - ray.o.x) / ray.d.x;
         if(t < t_min || t > t_max) {
             return std::nullopt;
@@ -135,7 +136,7 @@ public:
         return r;
     }
     
-    virtual BoundingBox getBoundingBox(float time0, float time1) override {
+    virtual BoundingBox getBoundingBox(float time0, float time1) const override {
         BoundingBox bbox(tinyMath::vec3f(x - DELTA_RECTANGLE_THICKNESS, y0, z0), tinyMath::vec3f(x + DELTA_RECTANGLE_THICKNESS, y1, z1));
         return bbox;
     }
