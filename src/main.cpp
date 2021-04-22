@@ -17,12 +17,14 @@
 #include "geometry/AxisAlignedBox.hpp"
 #include "geometry/transform/Translation.hpp"
 #include "geometry/transform/Rotation.hpp"
+#include "geometry/ConstantMedium.hpp"
 
 #include "material/Material.hpp"
 #include "material/Diffuse.hpp"
 #include "material/Metal.hpp"
 #include "material/Dielectric.hpp"
 #include "material/DiffuseLight.hpp"
+#include "material/Isotropic.hpp"   
 
 #include "accelerator/BVH.hpp"
 
@@ -70,27 +72,28 @@ void CornellBox(Scene& scene) {
 
     scene.addObject(std::make_shared<YZRectangle>(0, 555, 0, 555, 555, green));
     scene.addObject(std::make_shared<YZRectangle>(0, 555, 0, 555, 0, red));
-    scene.addObject(std::make_shared<XZRectangle>(213, 343, 227, 332, 554, light));
+    scene.addObject(std::make_shared<XZRectangle>(113, 443, 127, 432, 554, light));
     scene.addObject(std::make_shared<XZRectangle>(0, 555, 0, 555, 0, white));
     scene.addObject(std::make_shared<XZRectangle>(0, 555, 0, 555, 555, white));
     scene.addObject(std::make_shared<XYRectangle>(0, 555, 0, 555, 555, white));
 
     std::shared_ptr<Object> box1 = std::make_shared<AxisAlignedBox>(tinyMath::vec3f(0.0), tinyMath::vec3f(165, 330, 165), white);
     box1 = std::make_shared<RotationY>(box1, 15);
-    box1 = std::make_shared<Translation>(box1, tinyMath::vec3f(265,0,295));
-    scene.addObject(box1);
+    box1 = std::make_shared<Translation>(box1, tinyMath::vec3f(265, 0, 295));
 
-    std::shared_ptr<Object> box2 = std::make_shared<AxisAlignedBox>(tinyMath::vec3f(0), tinyMath::vec3f(165,165,165), white);
+    std::shared_ptr<Object> box2 = std::make_shared<AxisAlignedBox>(tinyMath::vec3f(0), tinyMath::vec3f(165, 165, 165), white);
     box2 = std::make_shared<RotationY>(box2, -18);
-    box2 = std::make_shared<Translation>(box2, tinyMath::vec3f(130,0,65));
-    scene.addObject(box2);
+    box2 = std::make_shared<Translation>(box2, tinyMath::vec3f(130, 0, 65));
+    
+    scene.addObject(std::make_shared<ConstantMedium>(box1, 0.01, tinyMath::vec3f(0.0f)));
+    scene.addObject(std::make_shared<ConstantMedium>(box2, 0.01, tinyMath::vec3f(1.0f)));
 }
 
 int main() {
     int width = 400;
     float aspect_ratio = 16.0f / 9.0f;
-    const int max_camera_samples = 32;
-    const int max_ray_bounce_times = 8;
+    int max_camera_samples = 32;
+    int max_ray_bounce_times = 8;
     std::string filepath = "./result.ppm";
     
     tinyMath::vec3f lookfrom;
@@ -184,7 +187,7 @@ int main() {
     case 6:
         CornellBox(scene);
         scene.setBackground(tinyMath::vec3f(0, 0, 0));
-
+        max_camera_samples = 100;
         aspect_ratio = 1.0f;
         width = 600;
         lookfrom = tinyMath::vec3f(278, 278, -800);

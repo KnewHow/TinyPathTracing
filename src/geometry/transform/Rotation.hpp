@@ -63,7 +63,7 @@ public:
             normal.x = get_x_prime(p.normal.x, p.normal.z);
             normal.z = get_z_prime(p.normal.x, p.normal.z);
             p.coords = hitPoint;
-            p.normal = normal;
+            p.normal = normal.normalize();
             return p;
         }
 
