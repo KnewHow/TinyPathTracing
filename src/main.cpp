@@ -74,6 +74,16 @@ void CornellBox(Scene& scene) {
     scene.addObject(std::make_shared<XZRectangle>(0, 555, 0, 555, 0, white));
     scene.addObject(std::make_shared<XZRectangle>(0, 555, 0, 555, 555, white));
     scene.addObject(std::make_shared<XYRectangle>(0, 555, 0, 555, 555, white));
+
+    std::shared_ptr<Object> box1 = std::make_shared<AxisAlignedBox>(tinyMath::vec3f(0.0), tinyMath::vec3f(165, 330, 165), white);
+    box1 = std::make_shared<RotationY>(box1, 15);
+    box1 = std::make_shared<Translation>(box1, tinyMath::vec3f(265,0,295));
+    scene.addObject(box1);
+
+    std::shared_ptr<Object> box2 = std::make_shared<AxisAlignedBox>(tinyMath::vec3f(0), tinyMath::vec3f(165,165,165), white);
+    box2 = std::make_shared<RotationY>(box2, -18);
+    box2 = std::make_shared<Translation>(box2, tinyMath::vec3f(130,0,65));
+    scene.addObject(box2);
 }
 
 int main() {

@@ -25,7 +25,7 @@ public:
         BoundingBox newBox;
         for(int i = 0; i < 2; i++) {
             for(int j = 0; j < 2; j++) {
-                for(int k = 0; j < 2; k++) {
+                for(int k = 0; k < 2; k++) {
                     float x = i * oldBox.max.x + (1 - i) * oldBox.min.x;
                     float y = j * oldBox.max.y + (1 - j) * oldBox.min.y;
                     float z = k * oldBox.max.z + (1 - k) * oldBox.min.z;
@@ -44,8 +44,28 @@ public:
     virtual std::optional<IntersectResult> intersect(const Ray& ray, float t_min, float t_max) const override {
         tinyMath::vec3f origin = ray.o;
         tinyMath::vec3f direction = ray.d;
-        origin.x = cos_theta * ray.o.x -sin_theta * ray.o.z;
+        
+        origin.x = get_x_prime_inverse(ray.o.x, ray.o.z);
+        origin.z = get_z_prime_inverse(ray.o.x, ray.o.z);
 
+        direction.x = get_x_prime_inverse(ray.d.x, ray.d.z);
+        direction.z = get_z_prime_inverse(ray.d.x, ray.d.z);
+
+        Ray rotated_ray(origin, direction, ray.time);
+
+        auto res = object->intersect(rotated_ray, t_min, t_max);
+        if(res.has_value()) {
+            auto p = res.value();
+            auto hitPoint = p.coords;
+            auto normal = p.normal;
+            hitPoint.x = get_x_prime(p.coords.x, p.coords.z);
+            hitPoint.z = get_z_prime(p.coords.x, p.coords.z);
+            normal.x = get_x_prime(p.normal.x, p.normal.z);
+            normal.z = get_z_prime(p.normal.x, p.normal.z);
+            p.coords = hitPoint;
+            p.normal = normal;
+            return p;
+        }
 
         return std::nullopt;
     }
@@ -61,7 +81,7 @@ private:
     }
 
     inline float get_x_prime_inverse(float x, float z) const {
-        return cos_theta * x + sin_theta * z;// TODO
+        return cos_theta * x + -sin_theta * z;
     }
 
     inline float get_z_prime(float x, float z) const {
@@ -69,7 +89,7 @@ private:
     }
 
     inline float get_z_prime_inverse(float x, float z) const {
-        return -sin_theta * x + cos_theta * z; // TODO
+        return sin_theta * x + cos_theta * z;
     }
 
     std::shared_ptr<Object> object;

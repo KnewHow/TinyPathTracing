@@ -4,6 +4,7 @@
 #include "../BoundingBox.hpp"
 
 class Translation : public Object {
+public:
     /**
      * construct a Translation object from original object
      * @param _object the object need to be translation
