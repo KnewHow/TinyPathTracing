@@ -36,7 +36,7 @@ struct BoundingBox {
     /**
      * combine a bouding box with another.
     */
-    BoundingBox combine(const BoundingBox& other) {
+    BoundingBox combine(const BoundingBox& other) const {
         BoundingBox res;
         for(int i = 0; i < 3; i++) {
             res.min[i] = std::min(min[i], other.min[i]);
@@ -48,7 +48,7 @@ struct BoundingBox {
     /**
      * combine a bounding box with a point
     */
-    BoundingBox combine(const tinyMath::vec3f& point) {
+    BoundingBox combine(const tinyMath::vec3f& point) const {
         BoundingBox res;
         for(int i = 0; i < 3; i++) {
             res.min[i] = std::min(min[i], point[i]);

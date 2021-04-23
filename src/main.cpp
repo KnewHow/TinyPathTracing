@@ -18,6 +18,7 @@
 #include "geometry/transform/Translation.hpp"
 #include "geometry/transform/Rotation.hpp"
 #include "geometry/ConstantMedium.hpp"
+#include "geometry/ObjectGroup.hpp"
 
 #include "material/Material.hpp"
 #include "material/Diffuse.hpp"
@@ -89,6 +90,62 @@ void CornellBox(Scene& scene) {
     scene.addObject(std::make_shared<ConstantMedium>(box2, 0.01, tinyMath::vec3f(1.0f)));
 }
 
+void final_test_scene(Scene& scene) {
+   
+    auto mat_diffuse_light = std::make_shared<DiffuseLight>(tinyMath::vec3f(7)); // light source
+    scene.addObject(std::make_shared<XZRectangle>(123, 423, 147, 412, 554, mat_diffuse_light));
+
+    auto mat_ground = std::make_shared<Diffuse>(tinyMath::vec3f(0.48, 0.83, 0.53));
+    const int boxes_per_side = 20;
+    for(int i = 0; i < 20; i++) { // floor
+        for(int j = 0; j < 20; j++) {
+            float w = 100.0f;
+            float x0 = -1000.0f + i * w;
+            float y0 = 0.0;
+            float z0 = -1000.0f + j * w;
+
+            float x1 = x0 + w;
+            float y1 = get_random_float(1, 101);
+            float z1 = z0 + w;
+            scene.addObject(std::make_shared<AxisAlignedBox>(tinyMath::vec3f(x0, y0, z0), tinyMath::vec3f(x1, y1, z1), mat_ground));
+        }
+    }
+
+    auto center1 = tinyMath::vec3f(400, 400, 200); // moving sphere
+    auto center2 = center1 + tinyMath::vec3f(30, 0, 0);
+    auto mat_moving_sphere = std::make_shared<Diffuse>(tinyMath::vec3f(0.7, 0.3, 0.1));
+    scene.addObject(std::make_shared<MovingSphere>(center1, center2, 0, 1, 50, mat_moving_sphere));
+
+    scene.addObject(std::make_shared<Sphere>(tinyMath::vec3f(260, 150, 45), 50, std::make_shared<Dielectric>(1.5))); // crystal sphere
+    scene.addObject(std::make_shared<Sphere>(tinyMath::vec3f(0, 150, 145), 50, std::make_shared<Metal>(tinyMath::vec3f(0.8, 0.8, 0.9), 1.0))); // metal sphere
+
+    auto boundary = std::make_shared<Sphere>(tinyMath::vec3f(360, 150, 145), 70, std::make_shared<Dielectric>(1.5)); // constant medium
+    scene.addObject(boundary);
+    scene.addObject(std::make_shared<ConstantMedium>(boundary, 0.2f, tinyMath::vec3f(0.2, 0.4, 0.9)));
+
+    auto wholeBoundary = std::make_shared<Sphere>(tinyMath::vec3f(0.0), 5000, std::make_shared<Dielectric>(1.5)); // whole constant medium
+    scene.addObject(std::make_shared<ConstantMedium>(wholeBoundary, 0.0001, tinyMath::vec3f(1.0)));
+
+    auto mat_earth = std::make_shared<Diffuse>(std::make_shared<ImageTexture>("../res/earthmap.jpg")); // earth
+    scene.addObject(std::make_shared<Sphere>(tinyMath::vec3f(400,200,400), 100, mat_earth));
+
+    auto tex_noise = std::make_shared<NoiseTexture>(0.1); // noise sphere
+    scene.addObject(std::make_shared<Sphere>(tinyMath::vec3f(220,280,300), 80, std::make_shared<Diffuse>(tex_noise)));
+
+    auto geo_group = std::make_shared<ObjectGroup>(); // lots of little spheres
+    auto mat_white = std::make_shared<Diffuse>(tinyMath::vec3f(0.73));
+    const int ns = 1000;
+    for(int i = 0; i < ns; i++) {
+        geo_group->addObject(std::make_shared<Sphere>(get_random_vector(0, 165), 10, mat_white));
+    }
+    geo_group->buildBVH();
+
+    scene.addObject(std::make_shared<Translation>(
+        std::make_shared<RotationY>(geo_group, 15), 
+        tinyMath::vec3f(-100,270,395))
+    );
+}
+
 int main() {
     int width = 400;
     float aspect_ratio = 16.0f / 9.0f;
@@ -120,7 +177,7 @@ int main() {
     
     Scene scene(tinyMath::vec3f(0.70, 0.80, 1.00));
     
-    switch (6)
+    switch (7)
     {
     case 1:
         lookfrom = tinyMath::vec3f(13.0f, 2.0f, 3.0f);
@@ -196,6 +253,22 @@ int main() {
         focus_dist = 10.0f;
         aperture = 0.0f;
         fov = 40.0f;
+        break;
+
+    case 7:
+        max_ray_bounce_times = 50;
+        max_camera_samples = 500;
+        final_test_scene(scene);
+        scene.setBackground(tinyMath::vec3f(0, 0, 0));
+        aspect_ratio = 1.0f;
+        width = 800;
+        lookfrom = tinyMath::vec3f(478, 278, -600);
+        lookat = tinyMath::vec3f(278, 278, 0);
+        vup = tinyMath::vec3f(0.0f, 1.0f, 0.0f);
+        focus_dist = 10.0f;
+        aperture = 0.0f;
+        fov = 40.0f;
+        break;
     }
 
     scene.buildBVH(0.0f, 1.0f);
