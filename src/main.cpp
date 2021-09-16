@@ -32,12 +32,16 @@ int main() {
     std::shared_ptr<MeshTriangle> left = std::make_shared<MeshTriangle>("../models/cornellbox/left.obj", red, "left");
     std::shared_ptr<MeshTriangle> right = std::make_shared<MeshTriangle>("../models/cornellbox/right.obj", green, "right");
     std::shared_ptr<MeshTriangle> lightMesh = std::make_shared<MeshTriangle>("../models/cornellbox/light.obj", light, "light");
+    std::shared_ptr<MeshTriangle> bunny = std::make_shared<MeshTriangle>("../models/bunny.obj", green, "bunny");
+    
 
     scene.addObject(floor);
     scene.addObject(shortbox);
     scene.addObject(tallbox);
     scene.addObject(left);
     scene.addObject(right);
+
+    // scene.addObject(bunny);
     scene.addObject(lightMesh);
     
     scene.buildBVH();
