@@ -29,6 +29,12 @@ set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 17)
 set(TinyMath_DIR "${LIB_DIR}/TinyMath")
 target_include_directories(${PROJECT_NAME} PRIVATE "${TinyMath_DIR}")
 
+# Google logging Library
+set(GLOG_DIR "${LIB_DIR}/glog")
+add_subdirectory("${GLOG_DIR}")
+target_link_libraries (TinyPathTracing glog::glog)
+#target_include_directories(${PROJECT_NAME} PRIVATE "${GLOG_DIR}/src") 
+
 # open mp
 find_package(OpenMP)
 if (OPENMP_FOUND)

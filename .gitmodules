@@ -1,3 +1,6 @@
 [submodule "lib/TinyMath"]
 	path = lib/TinyMath
 	url = git@github.com:KnewHow/TinyMath.git
+[submodule "lib/glog"]
+	path = lib/glog
+	url = git@github.com:google/glog.git

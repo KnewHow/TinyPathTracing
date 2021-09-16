@@ -11,8 +11,15 @@
 #include "Scene.hpp"
 #include "Renderer.hpp"
 
+#include <glog/logging.h>
 
-int main() {
+
+int main(int argc, char* argv[]) {
+    
+    google::InitGoogleLogging(argv[0]);
+    
+    int num_cookies = 10;
+    
     int width = 784;
     int height = 784;
     Scene scene(width, height);
@@ -41,7 +48,7 @@ int main() {
     scene.addObject(left);
     scene.addObject(right);
 
-    // scene.addObject(bunny);
+    scene.addObject(bunny);
     scene.addObject(lightMesh);
     
     scene.buildBVH();
